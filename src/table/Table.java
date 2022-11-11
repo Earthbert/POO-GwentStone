@@ -3,8 +3,6 @@ package table;
 import utils.UnitPos;
 
 public class Table {
-    private final static Table Instance = new Table();
-
     final Row[] rows = new Row[4];
 
     private Table() {
@@ -12,9 +10,5 @@ public class Table {
         rows[1] = new Row(2, UnitPos.CLOSE);
         rows[2] = new Row(1, UnitPos.CLOSE);
         rows[3] = new Row(1, UnitPos.RANGED);
-    }
-
-    public static Table getTable() {
-        return Instance;
     }
 }
