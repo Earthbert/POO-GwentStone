@@ -1,6 +1,7 @@
 package table;
 
 import cards.Minion;
+import consts.UnitType;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,11 +1,12 @@
 package cards;
 
-import table.UnitType;
+import consts.UnitType;
 
 public class Minion extends Card implements Attackable {
     private int health;
     private int attackDamage;
 
+    private boolean tank;
     private boolean attacked;
 
     private int frozen;
@@ -48,5 +49,9 @@ public class Minion extends Card implements Attackable {
     
     public void attack(Attackable card) {
         card.takeDamage(attackDamage);
+    }
+
+    public boolean isTank() {
+        return tank;
     }
 }

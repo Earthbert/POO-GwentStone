@@ -1,5 +1,7 @@
 package table;
 
+import consts.UnitType;
+
 public class Table {
     private final static Table Instance = new Table();
 

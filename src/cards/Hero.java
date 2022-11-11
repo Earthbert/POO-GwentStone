@@ -9,10 +9,6 @@ public abstract class Hero extends Card implements Attackable{
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
     public boolean takeDamage (int damage) {
         health -= damage;
         return health <= 0;
