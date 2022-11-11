@@ -1,12 +1,23 @@
 package cards;
 
+import fileio.CardInput;
+
+import java.util.ArrayList;
+
 public abstract class Card {
-    private String name;
-    private String description;
-    private String colors;
-    private int mana;
+    protected String name;
+    protected final String description;
+    protected final ArrayList<String> colors;
+    protected int mana;
 
     private boolean usedCard = false;
+
+    public Card(CardInput card) {
+        this.name = card.getName();
+        this.description = card.getDescription();
+        this.colors = card.getColors();
+        this.mana = card.getMana();
+    }
 
     public String getName() {
         return name;
@@ -20,15 +31,8 @@ public abstract class Card {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getColors() {
+    public ArrayList<String> getColors() {
         return colors;
-    }
-
-    public void setColors(String colors) {this.colors = colors;
     }
 
     public int getMana() {

@@ -1,17 +1,27 @@
 package cards;
 
-import consts.UnitType;
+import fileio.CardInput;
+import utils.UnitPos;
+import utils.UnitProp;
 
 public class Minion extends Card implements Attackable {
-    private int health;
-    private int attackDamage;
+    protected int health;
+    protected int attackDamage;
 
-    private boolean tank;
+    private final UnitPos position;
+    private final boolean tank;
+
     private boolean attacked;
-
     private int frozen;
 
-    UnitType position;
+
+    public Minion(CardInput card) {
+        super(card);
+        this.position = UnitProp.getPosition(name);
+        this.tank = UnitProp.isTank(name);
+        this.health = card.getHealth();
+        this.attackDamage = card.getAttackDamage();
+    }
 
     public int getHealth() {
         return health;

@@ -4,9 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6cc66d78-5417-4a22-812e-504d346b59ab" name="Changes" comment="Initial Commit">
+    <list default="true" id="6cc66d78-5417-4a22-812e-504d346b59ab" name="Changes" comment="Create environment cards.">
+      <change afterPath="$PROJECT_DIR$/src/utils/UnitTypes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cards/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cards/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cards/Hero.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cards/heroes/Hero.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cards/Minion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cards/Minion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/consts/ConstLists.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/consts/UnitType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/UnitType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/deck/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/deck/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/players/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/players/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/table/Row.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/table/Row.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/table/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/table/Table.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -51,13 +60,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Administrator/IdeaProjects/GwentStone",
+    "last_opened_file_path": "C:/Users/Administrator/IdeaProjects/poo-labs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -77,7 +86,19 @@
       <workItem from="1667979061804" duration="1176000" />
       <workItem from="1668012004548" duration="19000" />
       <workItem from="1668012078022" duration="1697000" />
-      <workItem from="1668021027870" duration="3510000" />
+      <workItem from="1668021027870" duration="3858000" />
+      <workItem from="1668024929056" duration="69000" />
+      <workItem from="1668025011359" duration="89000" />
+      <workItem from="1668107703690" duration="3462000" />
+      <workItem from="1668176012091" duration="693000" />
+      <workItem from="1668176715964" duration="670000" />
+      <workItem from="1668177442928" duration="88000" />
+      <workItem from="1668177546901" duration="116000" />
+      <workItem from="1668177676104" duration="244000" />
+      <workItem from="1668177936587" duration="110000" />
+      <workItem from="1668178060195" duration="66000" />
+      <workItem from="1668178138075" duration="87000" />
+      <workItem from="1668178236664" duration="8707000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1667913269744</created>
@@ -86,7 +107,56 @@
       <option name="project" value="LOCAL" />
       <updated>1667913269744</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add blueprint for how cards will be implemented.">
+      <created>1668024695265</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1668024695265</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add blueprint for how the table and rows will be implemented.">
+      <created>1668024737200</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1668024737200</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added Deck and Player classes. (Could be changed in the near future)">
+      <created>1668024903957</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1668024903957</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Create special cards classes">
+      <created>1668180910872</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1668180910872</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fixed the src.main.Test">
+      <created>1668181035132</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1668181035132</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Did some shit.">
+      <created>1668181089858</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1668181089858</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Create environment cards.">
+      <created>1668181900431</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1668181900431</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -105,6 +175,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
+    <MESSAGE value="Add blueprint for how cards will be implemented." />
+    <MESSAGE value="Add blueprint for how the table and rows will be implemented." />
+    <MESSAGE value="Added Deck and Player classes. (Could be changed in the near future)" />
+    <MESSAGE value="Add Classes for game structure" />
+    <MESSAGE value="Create special cards classes" />
+    <MESSAGE value="Add class for const list which make checks easier." />
+    <MESSAGE value="Fixed the src.main.Test" />
+    <MESSAGE value="Add Program entry point." />
+    <MESSAGE value="Did some shit." />
+    <MESSAGE value="Create environment cards." />
+    <option name="LAST_COMMIT_MESSAGE" value="Create environment cards." />
   </component>
 </project>

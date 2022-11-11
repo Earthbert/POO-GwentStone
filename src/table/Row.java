@@ -1,7 +1,7 @@
 package table;
 
 import cards.Minion;
-import consts.UnitType;
+import utils.UnitPos;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,9 +10,9 @@ public class Row {
     private List<Minion> cardOnRow = new LinkedList<>();
 
     final int player;
-    final UnitType type;
+    final UnitPos type;
 
-    public Row(int player, UnitType type) {
+    public Row(int player, UnitPos type) {
         this.player = player;
         this.type = type;
     }

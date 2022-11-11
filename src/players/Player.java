@@ -1,6 +1,6 @@
 package players;
 
-import cards.Hero;
+import cards.heroes.Hero;
 import deck.Deck;
 
 public class Player {
