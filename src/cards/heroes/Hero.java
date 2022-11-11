@@ -1,9 +1,16 @@
-package cards;
+package cards.heroes;
 
+import cards.Attackable;
+import cards.Card;
+import fileio.CardInput;
 import table.Row;
 
-public abstract class Hero extends Card implements Attackable{
+public abstract class Hero extends Card implements Attackable {
     private int health = 30;
+
+    public Hero(CardInput card) {
+        super(card);
+    }
 
     public int getHealth() {
         return health;
