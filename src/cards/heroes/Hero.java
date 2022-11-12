@@ -22,23 +22,4 @@ public abstract class Hero extends Card implements Attackable {
     }
 
     abstract void useAbility (Row row);
-
-    @Override
-    public String toString() {
-        return "{"
-            +  "mana="
-            + mana
-            +  ", description='"
-            + description
-            + '\''
-            + ", colors="
-            + colors
-            + ", name='"
-            +  ""
-            + name
-            + '\''
-            + ", health="
-            + health
-            + '}';
-    }
 }

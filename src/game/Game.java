@@ -1,10 +1,10 @@
 package game;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import deck.Deck;
 import fileio.*;
+import game.command.Command;
 import table.Table;
+import utils.CommandTypes;
 import utils.ExceptionNoCommands;
 import utils.ExceptionWonGame;
 
@@ -32,18 +32,24 @@ public class Game {
 
         int playerOneIndex = gameInput.getStartGame().getPlayerOneDeckIdx();
         Deck playerOneDeck = new Deck(playerOneDecks.getDecks().get(playerOneIndex), shuffleSeed);
-        GameMaster.getInstance().player[1].startGame(gameInput.getStartGame().getPlayerOneHero(), playerOneDeck);
+        GameMaster.getInstance().getPlayer(1).startGame(gameInput.getStartGame().getPlayerOneHero(), playerOneDeck);
 
         int playerTwoIndex = gameInput.getStartGame().getPlayerTwoDeckIdx();
         Deck playerTwoDeck = new Deck(playerTwoDecks.getDecks().get(playerTwoIndex), shuffleSeed);
-        GameMaster.getInstance().player[2].startGame(gameInput.getStartGame().getPlayerOneHero(), playerTwoDeck);
+        GameMaster.getInstance().getPlayer(2).startGame(gameInput.getStartGame().getPlayerOneHero(), playerTwoDeck);
 
         table = new Table();
     }
 
     void playTurn(int playerId) throws ExceptionWonGame, ExceptionNoCommands {
-        while (cmdInx < commands.size()) {
+        loop: while (cmdInx < commands.size()) {
             ActionsInput command = commands.get(cmdInx);
+
+            switch (CommandTypes.getType(command.getCommand())) {
+                case TURNOVER -> {break loop;}
+                case ACTION -> Command.Action.handle(command, playerId);
+                case OUTPUT -> Command.Output.handle(command, playerId);
+            }
 
             cmdInx++;
             if (cmdInx == commands.size())
@@ -54,8 +60,8 @@ public class Game {
 
     void play() {
         while (true) {
-            GameMaster.getInstance().player[1].preparePlayer(manaGain);
-            GameMaster.getInstance().player[2].preparePlayer(manaGain);
+            GameMaster.getInstance().getPlayer(1).preparePlayer(manaGain);
+            GameMaster.getInstance().getPlayer(2).preparePlayer(manaGain);
 
             try {
                 playTurn(startingPlayer);

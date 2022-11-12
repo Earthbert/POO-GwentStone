@@ -8,8 +8,8 @@ public class CommandTypes {
     private static final HashMap<String, CommandType> cmdTypes = new HashMap<>();
 
     static {
+        cmdTypes.put("endPlayerTurn", CommandType.TURNOVER);
         // Action commands
-        cmdTypes.put("endPlayerTurn", CommandType.ACTION);
         cmdTypes.put("placeCard", CommandType.ACTION);
         cmdTypes.put("cardUsesAttack", CommandType.ACTION);
         cmdTypes.put("cardUsesAbility", CommandType.ACTION);
@@ -28,5 +28,9 @@ public class CommandTypes {
         cmdTypes.put("getFrozenCardsOnTable", CommandType.OUTPUT);
         cmdTypes.put("getTotalGamesPlayed", CommandType.OUTPUT);
         cmdTypes.put("getPlayerOneWins", CommandType.OUTPUT);
+    }
+
+    public static CommandType getType(String command) {
+        return cmdTypes.get(command);
     }
 }

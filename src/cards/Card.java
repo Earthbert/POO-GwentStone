@@ -43,23 +43,4 @@ public abstract class Card {
         this.mana = mana;
     }
 
-    @Override
-    public String toString() {
-        return "{"
-            +  "mana="
-            + mana
-            +  ", attackDamage="
-            + ", health="
-            +  ", description='"
-            + description
-            + '\''
-            + ", colors="
-            + colors
-            + ", name='"
-            +  ""
-            + name
-            + '\''
-            + '}';
-    }
-
 }
