@@ -1,57 +1,55 @@
 package utils;
 
-import java.util.List;
+import java.util.HashMap;
 
 public class UnitProp {
-    public static final List<String> standardCards
-        = List.of(new String[]{"Sentinel",
-        "Berserker",
-        "Goliath",
-        "Warden"
-    });
+    static class Proprieties {
+        String type;
+        UnitPos position;
+        boolean tank;
 
-    public static final List<String> envCards
-        = List.of(new String[]{"Firestorm",
-        "Winterfell",
-        "Heart Hound"
-    });
+        public Proprieties(String type, UnitPos position, boolean tank) {
+            this.type = type;
+            this.position = position;
+            this.tank = tank;
+        }
+    }
 
-    public static final List<String> specialCards
-        = List.of(new String[]{"The Ripper",
-        "Miraj",
-        "The Cursed One",
-        "Disciple"
-    });
+    private static final HashMap<String, Proprieties> unitProps = new HashMap<>() {
+        @Override
+        public Proprieties get(Object key) {
+            if(! containsKey(key))
+                return new Proprieties("none", null, false);
+            return super.get(key);
+        }
+    };
 
-    public static final List<String> rangedCards
-        = List.of(new String[]{"Sentinel",
-        "Berserker",
-        "The Cursed One",
-        "Disciple"
-    });
-
-    public static final List<String> tankCards
-        = List.of(new String[]{"Goliath",
-        "Warden"
-    });
+    static {
+        // Standard Cards//
+        unitProps.put("Sentinel", new Proprieties("Standard", UnitPos.RANGED, false));
+        unitProps.put("Berserker", new Proprieties("Standard", UnitPos.RANGED, false));
+        unitProps.put("Goliath", new Proprieties("Standard", UnitPos.CLOSE, true));
+        unitProps.put("Warden", new Proprieties("Standard", UnitPos.CLOSE, true));
+        // Special Cards //
+        unitProps.put("The Ripper", new Proprieties("Special", UnitPos.RANGED, false));
+        unitProps.put("Miraj", new Proprieties("Special", UnitPos.RANGED, false));
+        unitProps.put("The Cursed One", new Proprieties("Special", UnitPos.RANGED, false));
+        unitProps.put("Disciple", new Proprieties("Special", UnitPos.RANGED, false));
+        // Environment Cards //
+        unitProps.put("Firestorm", new Proprieties("Environment", null, false));
+        unitProps.put("Winterfell", new Proprieties("Environment", null, false));
+        unitProps.put("Heart Hound", new Proprieties("Environment", null, false));
+    }
 
     public static boolean isTank (String name) {
-        return tankCards.contains(name);
+        return unitProps.get(name).tank;
     }
 
     public static UnitPos getPosition (String name) {
-        if (rangedCards.contains(name))
-            return UnitPos.RANGED;
-        return UnitPos.CLOSE;
+        return unitProps.get(name).position;
     }
 
     public static String getType(String name) {
-        if (specialCards.contains(name))
-            return "Special";
-        if (envCards.contains(name))
-            return "Environment";
-        if (standardCards.contains(name))
-            return "Standard";
-        return "none";
+        return unitProps.get(name).type;
     }
 }
