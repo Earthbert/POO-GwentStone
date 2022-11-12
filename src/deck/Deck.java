@@ -7,12 +7,11 @@ import cards.environmentcards.*;
 import fileio.CardInput;
 import utils.UnitProp;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Deck {
     private List<Card> cardList = new LinkedList<>();
+    private List<Card> hand = new LinkedList<>();
 
     private void createEnvCard(CardInput cardInput) {
         switch (cardInput.getName()) {
@@ -35,7 +34,7 @@ public class Deck {
         cardList.add(new Minion(cardInput));
     }
 
-    public Deck(ArrayList<CardInput> deckInput) {
+    public Deck(ArrayList<CardInput> deckInput, int shuffleSeed) {
         for (CardInput cardInput : deckInput) {
             switch (UnitProp.getType(cardInput.getName())) {
                 case "Standard" -> createStandardCard(cardInput);
@@ -44,5 +43,7 @@ public class Deck {
                 case "none" -> System.out.println("Invalid Card");
             }
         }
+        Random rnd = new Random(shuffleSeed);
+        Collections.shuffle(cardList, rnd);
     }
 }
