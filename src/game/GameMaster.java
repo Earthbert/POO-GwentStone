@@ -6,14 +6,6 @@ import fileio.Input;
 import players.Player;
 
 public class GameMaster {
-    private final static GameMaster instance = new GameMaster();
-
-    public static GameMaster getInstance() {
-        return instance;
-    }
-
-    private GameMaster() {}
-
     ArrayNode output;
 
     private final Player[] player = new Player[3];
@@ -23,7 +15,6 @@ public class GameMaster {
     }
 
     private Game currentGame;
-
     public Game getCurrentGame() {
         return currentGame;
     }
@@ -33,7 +24,7 @@ public class GameMaster {
         player[2] = new Player(2);
         for (GameInput gameInput : inputData.getGames()) {
             this.output = output;
-            currentGame = new Game(gameInput, inputData.getPlayerOneDecks(), inputData.getPlayerTwoDecks());
+            currentGame = new Game(gameInput, inputData.getPlayerOneDecks(), inputData.getPlayerTwoDecks(), this);
             currentGame.play();
         }
     }

@@ -11,6 +11,7 @@ import utils.ExceptionWonGame;
 import java.util.ArrayList;
 
 public class Game {
+    private final GameMaster gameMaster;
     private int manaGain = 1;
     private final ArrayList<ActionsInput> commands;
     private int cmdInx = 0;
@@ -19,7 +20,8 @@ public class Game {
     public final Table table;
 
 
-    public Game(GameInput gameInput, DecksInput playerOneDecks, DecksInput playerTwoDecks) {
+    public Game(GameInput gameInput, DecksInput playerOneDecks, DecksInput playerTwoDecks, GameMaster gameMaster) {
+        this.gameMaster = gameMaster;
         commands = gameInput.getActions();
 
         startingPlayer = gameInput.getStartGame().getStartingPlayer();
@@ -32,11 +34,11 @@ public class Game {
 
         int playerOneIndex = gameInput.getStartGame().getPlayerOneDeckIdx();
         Deck playerOneDeck = new Deck(playerOneDecks.getDecks().get(playerOneIndex), shuffleSeed);
-        GameMaster.getInstance().getPlayer(1).startGame(gameInput.getStartGame().getPlayerOneHero(), playerOneDeck);
+        this.gameMaster.getPlayer(1).startGame(gameInput.getStartGame().getPlayerOneHero(), playerOneDeck);
 
         int playerTwoIndex = gameInput.getStartGame().getPlayerTwoDeckIdx();
         Deck playerTwoDeck = new Deck(playerTwoDecks.getDecks().get(playerTwoIndex), shuffleSeed);
-        GameMaster.getInstance().getPlayer(2).startGame(gameInput.getStartGame().getPlayerOneHero(), playerTwoDeck);
+        this.gameMaster.getPlayer(2).startGame(gameInput.getStartGame().getPlayerOneHero(), playerTwoDeck);
 
         table = new Table();
     }
@@ -60,8 +62,8 @@ public class Game {
 
     void play() {
         while (true) {
-            GameMaster.getInstance().getPlayer(1).preparePlayer(manaGain);
-            GameMaster.getInstance().getPlayer(2).preparePlayer(manaGain);
+            gameMaster.getPlayer(1).preparePlayer(manaGain);
+            gameMaster.getPlayer(2).preparePlayer(manaGain);
 
             try {
                 playTurn(startingPlayer);

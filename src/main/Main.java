@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
 import fileio.Input;
+import game.Game;
 import game.GameMaster;
 
 import java.io.File;
@@ -70,7 +71,8 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
-        GameMaster.getInstance().entry(inputData, output);
+        GameMaster games = new GameMaster();
+        games.entry(inputData, output);
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
