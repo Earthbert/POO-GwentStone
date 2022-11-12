@@ -10,28 +10,28 @@ import utils.UnitProp;
 import java.util.*;
 
 public class Deck {
-    private List<Card> cardList = new LinkedList<>();
+    private List<Card> cardOnDeck = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
 
     private void createEnvCard(CardInput cardInput) {
         switch (cardInput.getName()) {
-            case "Firestorm" -> cardList.add(new Firestorm(cardInput));
-            case "Heart Hound" -> cardList.add(new HeartHound(cardInput));
-            case "Winterfell" -> cardList.add(new Winterfell(cardInput));
+            case "Firestorm" -> cardOnDeck.add(new Firestorm(cardInput));
+            case "Heart Hound" -> cardOnDeck.add(new HeartHound(cardInput));
+            case "Winterfell" -> cardOnDeck.add(new Winterfell(cardInput));
         }
     }
 
     private void createSpecialCard(CardInput cardInput) {
         switch (cardInput.getName()) {
-            case "The Ripper" -> cardList.add(new TheRipper(cardInput));
-            case "The Cursed One" -> cardList.add(new TheCursedOne(cardInput));
-            case "Miraj" -> cardList.add(new Miraj(cardInput));
-            case "Disciple" -> cardList.add(new Disciple(cardInput));
+            case "The Ripper" -> cardOnDeck.add(new TheRipper(cardInput));
+            case "The Cursed One" -> cardOnDeck.add(new TheCursedOne(cardInput));
+            case "Miraj" -> cardOnDeck.add(new Miraj(cardInput));
+            case "Disciple" -> cardOnDeck.add(new Disciple(cardInput));
         }
     }
 
     private void createStandardCard(CardInput cardInput) {
-        cardList.add(new Minion(cardInput));
+        cardOnDeck.add(new Minion(cardInput));
     }
 
     public Deck(ArrayList<CardInput> deckInput, int shuffleSeed) {
@@ -44,6 +44,19 @@ public class Deck {
             }
         }
         Random rnd = new Random(shuffleSeed);
-        Collections.shuffle(cardList, rnd);
+        Collections.shuffle(cardOnDeck, rnd);
+    }
+
+    public List<Card> getCardOnDeck() {
+        return cardOnDeck;
+    }
+
+    public void setCardOnDeck(List<Card> cardOnDeck) {
+        this.cardOnDeck = cardOnDeck;
+    }
+
+    public void prepareDeck() {
+        if (!cardOnDeck.isEmpty())
+            hand.add(cardOnDeck.remove(0));
     }
 }

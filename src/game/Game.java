@@ -1,46 +1,81 @@
 package game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import deck.Deck;
 import fileio.*;
+import table.Table;
+import utils.ExceptionNoCommands;
+import utils.ExceptionWonGame;
 
 import java.util.ArrayList;
 
 public class Game {
+    private int manaGain = 1;
     private final ArrayList<ActionsInput> commands;
     private int cmdInx = 0;
     private final int startingPlayer;
     private final int secondPlayer;
+    public final Table table;
+
 
     public Game(GameInput gameInput, DecksInput playerOneDecks, DecksInput playerTwoDecks) {
         commands = gameInput.getActions();
-        int shuffleSeed = gameInput.getStartGame().getShuffleSeed();
+
         startingPlayer = gameInput.getStartGame().getStartingPlayer();
         if (startingPlayer == 1)
             secondPlayer = 2;
         else
             secondPlayer = 1;
 
+        int shuffleSeed = gameInput.getStartGame().getShuffleSeed();
+
         int playerOneIndex = gameInput.getStartGame().getPlayerOneDeckIdx();
-        GameMaster.getInstance().player[1].deck = new Deck(playerOneDecks.getDecks().get(playerOneIndex), shuffleSeed);
-        GameMaster.getInstance().player[1].selectHero(gameInput.getStartGame().getPlayerOneHero());
+        Deck playerOneDeck = new Deck(playerOneDecks.getDecks().get(playerOneIndex), shuffleSeed);
+        GameMaster.getInstance().player[1].startGame(gameInput.getStartGame().getPlayerOneHero(), playerOneDeck);
 
-        int playerTwoIndex = gameInput.getStartGame().getPlayerOneDeckIdx();
-        GameMaster.getInstance().player[2].deck = new Deck(playerTwoDecks.getDecks().get(playerTwoIndex), shuffleSeed);
-        GameMaster.getInstance().player[2].selectHero(gameInput.getStartGame().getPlayerTwoHero());
+        int playerTwoIndex = gameInput.getStartGame().getPlayerTwoDeckIdx();
+        Deck playerTwoDeck = new Deck(playerTwoDecks.getDecks().get(playerTwoIndex), shuffleSeed);
+        GameMaster.getInstance().player[2].startGame(gameInput.getStartGame().getPlayerOneHero(), playerTwoDeck);
+
+        table = new Table();
     }
 
-    void playTurn(int playerId) {
+    void playTurn(int playerId) throws ExceptionWonGame, ExceptionNoCommands {
         while (cmdInx < commands.size()) {
-            ActionsInput commad = commands.get(cmdInx);
+            ActionsInput command = commands.get(cmdInx);
+
             cmdInx++;
+            if (cmdInx == commands.size())
+                throw new ExceptionNoCommands();
         }
+        table.prepareTable(playerId);
     }
 
-    void startGame() {
+    void play() {
         while (true) {
-            playTurn(startingPlayer);
-            playTurn(secondPlayer);
+            GameMaster.getInstance().player[1].preparePlayer(manaGain);
+            GameMaster.getInstance().player[2].preparePlayer(manaGain);
 
+            try {
+                playTurn(startingPlayer);
+            } catch (ExceptionNoCommands e) {
+                return;
+            } catch (ExceptionWonGame e) {
+                System.out.println(e.toString());
+            }
+
+            try {
+                playTurn(secondPlayer);
+            } catch (ExceptionNoCommands e) {
+                return;
+            } catch (ExceptionWonGame e) {
+                System.out.println(e.toString());
+            }
+
+            if (manaGain < 10) {
+                manaGain++;
+            }
         }
     }
 }

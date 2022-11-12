@@ -31,8 +31,8 @@ public class UnitProp {
         unitProps.put("Goliath", new Proprieties("Standard", UnitPos.CLOSE, true));
         unitProps.put("Warden", new Proprieties("Standard", UnitPos.CLOSE, true));
         // Special Cards //
-        unitProps.put("The Ripper", new Proprieties("Special", UnitPos.RANGED, false));
-        unitProps.put("Miraj", new Proprieties("Special", UnitPos.RANGED, false));
+        unitProps.put("The Ripper", new Proprieties("Special", UnitPos.CLOSE, false));
+        unitProps.put("Miraj", new Proprieties("Special", UnitPos.CLOSE, false));
         unitProps.put("The Cursed One", new Proprieties("Special", UnitPos.RANGED, false));
         unitProps.put("Disciple", new Proprieties("Special", UnitPos.RANGED, false));
         // Environment Cards //

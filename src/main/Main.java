@@ -70,7 +70,7 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
-        GameMaster.getInstance().entryProgram(inputData, output);
+        GameMaster.getInstance().entry(inputData, output);
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);

@@ -12,7 +12,7 @@ public class Minion extends Card implements Attackable {
     private final boolean tank;
 
     private boolean attacked;
-    private int frozen;
+    private boolean frozen;
 
 
     public Minion(CardInput card) {
@@ -40,15 +40,29 @@ public class Minion extends Card implements Attackable {
     }
 
     public boolean isFrozen() {
-        return frozen > 0;
+        return frozen;
     }
 
     public void frezze() {
-        frozen = 2;
+        frozen = true;
     }
 
-    public boolean isAttacked() {
+    public boolean isTank() {
+        return tank;
+    }
+
+    public boolean hasAttacked() {
         return attacked;
+    }
+
+
+    /**
+     * Prepare card for next turn.
+     * Clears frozen state, puts attacked to false
+     */
+    public void prepareCard() {
+        attacked = false;
+        frozen = false;
     }
 
     public boolean takeDamage(int damage) {
@@ -61,7 +75,24 @@ public class Minion extends Card implements Attackable {
         card.takeDamage(attackDamage);
     }
 
-    public boolean isTank() {
-        return tank;
+    @Override
+    public String toString() {
+        return "{"
+            +  "mana="
+            + mana
+            +  ", attackDamage="
+            + attackDamage
+            + ", health="
+            + health
+            +  ", description='"
+            + description
+            + '\''
+            + ", colors="
+            + colors
+            + ", name='"
+            +  ""
+            + name
+            + '\''
+            + '}';
     }
 }

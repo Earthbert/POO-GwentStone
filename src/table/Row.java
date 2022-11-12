@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Row {
-    private List<Minion> cardOnRow = new LinkedList<>();
+    private List<Minion> cardsOnRow = new LinkedList<>();
 
     final int player;
     final UnitPos type;
@@ -18,6 +18,16 @@ public class Row {
     }
 
     public int getNrOfCards () {
-        return cardOnRow.size();
+        return cardsOnRow.size();
+    }
+
+    /**
+     * Prepare row for next turn.
+     * Calls prepareCard.
+     */
+    public void prepareRow() {
+        for (Minion minion : cardsOnRow) {
+            minion.prepareCard();
+        }
     }
 }
