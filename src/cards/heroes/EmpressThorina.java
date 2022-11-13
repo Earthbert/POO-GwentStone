@@ -16,7 +16,7 @@ public class EmpressThorina extends Hero{
     public void useAbility(Row row) {
         List<Minion> minions = row.getCardsOnRow();
         Minion minion = minions.get(0);
-        for (Minion m : row.getCardsOnRow()) {
+        for (Minion m : minions) {
             if (minion.getHealth() <= m.getHealth()) {
                 minion = m;
             }
