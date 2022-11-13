@@ -15,5 +15,6 @@ public class KingMudface extends Hero {
         for (Minion minion : row.getCardsOnRow()) {
             minion.setHealth(minion.getHealth() + 1);
         }
+        attacked = true;
     }
 }

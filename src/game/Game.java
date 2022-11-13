@@ -1,22 +1,24 @@
 package game;
 
+import cards.Attackable;
 import cards.Card;
 import cards.Minion;
-import cards.environmentcards.Environment;
-import cards.environmentcards.HeartHound;
-import cards.heroes.EmpressThorina;
-import cards.heroes.LordRoyce;
-import cards.specialcards.Disciple;
-import cards.specialcards.SpecialCard;
+import cards.environmentcards.*;
+import cards.heroes.*;
+import cards.specialcards.*;;
 import deck.Deck;
-import fileio.*;
+import fileio.ActionsInput;
+import fileio.Coordinates;
+import fileio.DecksInput;
+import fileio.GameInput;
+import game.errors.*;
+import game.errors.GameOver;
 import players.Player;
 import table.Table;
-import utils.CommandTypes;
-import utils.ExceptionNoCommands;
-import utils.ExceptionWonGame;
+import utils.*;
 
 import java.util.ArrayList;
+
 
 public class Game {
     private final GameMaster gameMaster;
@@ -52,11 +54,10 @@ public class Game {
         table = new Table();
     }
 
-    void playTurn(int playerId) throws ExceptionWonGame, ExceptionNoCommands {
-        loop:
-        while (cmdInx < commands.size()) {
+    void playTurn(int playerId) {
+        loop: while (true) {
             ActionsInput command = commands.get(cmdInx);
-
+            cmdInx++;
             switch (CommandTypes.getType(command.getCommand())) {
                 case TURNOVER -> {
                     break loop;
@@ -65,8 +66,7 @@ public class Game {
                 case OUTPUT -> this.command.output.handle(command, playerId);
             }
 
-            cmdInx++;
-            if (cmdInx == commands.size())
+            if (cmdInx >= commands.size())
                 throw new ExceptionNoCommands();
         }
         table.prepareTable(playerId);
@@ -82,7 +82,9 @@ public class Game {
             } catch (ExceptionNoCommands e) {
                 return;
             } catch (ExceptionWonGame e) {
-                System.out.println(e.toString());
+                gameMaster.getPlayer(startingPlayer).winGame();
+                new GameOver(startingPlayer, gameMaster.output);
+                return;
             }
 
             try {
@@ -90,7 +92,9 @@ public class Game {
             } catch (ExceptionNoCommands e) {
                 return;
             } catch (ExceptionWonGame e) {
-                System.out.println(e.toString());
+                gameMaster.getPlayer(secondPlayer).winGame();
+                new GameOver(secondPlayer, gameMaster.output);
+                return;
             }
 
             if (manaGain < 10) {
@@ -111,139 +115,144 @@ public class Game {
                     case "cardUsesAbility" -> cardUsesAbility(command.getCardAttacker(), command.getCardAttacked(),playerId);
                     case "useAttackHero" -> useAttackHero(command.getCardAttacker(), playerId);
                     case "useHeroAbility" -> useHeroAbility(command.getAffectedRow(), playerId);
-                    case "useEnvironmentCard" -> useEnvironmentCard(command.getAffectedRow(), playerId);
+                    case "useEnvironmentCard" -> useEnvironmentCard(command.getHandIdx(), command.getAffectedRow(), playerId);
                 }
             }
 
             public void placeCard(int handIdx, int playerId) {
-                Card card = gameMaster.getPlayer(playerId).getDeck().getCardFromHand(handIdx);
+                Player player = gameMaster.getPlayer(playerId);
+                Card card = player.getDeck().getCardFromHand(handIdx);
                 if (card instanceof Environment) {
-                    //TODO PRINT ERROR
+                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.PLACE_ENV), gameMaster.output);
                     return;
                 }
-                if (gameMaster.getPlayer(playerId).getMana() < card.getMana()) {
-                    //TODO PRINT ERROR
+                if (player.getMana() < card.getMana()) {
+                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.NO_MANA), gameMaster.output);
                     return;
                 }
                 if (!table.placeCard((Minion) card, playerId)) {
-                    //TODO PRINT ERROR
+                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.FULL_ROW), gameMaster.output);
                     return;
                 }
-                gameMaster.getPlayer(playerId).getDeck().usedCard(handIdx);
+                player.getDeck().usedCard(handIdx);
+                player.setMana(player.getMana() - card.getMana());
             }
 
-            public void cardUsesAttack(Coordinates attackerCord, Coordinates attackedCord, int playerId) {
-                Minion attacker = table.getCard(attackerCord.getX(), attackerCord.getY());
-                Minion attacked = table.getCard(attackedCord.getX(), attackedCord.getY());
+            public void cardUsesAttack(Coordinates attackerC, Coordinates attackedC, int playerId) {
+                Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
+                Minion attacked = table.getCard(attackedC.getX(), attackedC.getY());
                 if (attacker.isFrozen()) {
-                    //TODO PRINT ERROR
+                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    //TODO PRINT ERROR
+                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
                     return;
                 }
-                if (table.whichPlayer(attackedCord.getX()) == playerId) {
-                    //TODO PRINT ERROR
+                if (table.whichPlayer(attackedC.getX()) == playerId) {
+                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK), gameMaster.output);
                     return;
                 }
                 if (!table.canAttack(playerId) && !attacked.isTank()) {
-                    //TODO PRINT ERROR
+                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
                     return;
                 }
                 attacker.attack(attacked);
             }
 
-            public void cardUsesAbility(Coordinates attackerCord, Coordinates attackedCord, int playerId) {
-                Minion attacker = table.getCard(attackerCord.getX(), attackerCord.getY());
-                Minion attacked = table.getCard(attackedCord.getX(), attackedCord.getY());
+            public void cardUsesAbility(Coordinates attackerC, Coordinates attackedC, int playerId) {
+                Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
+                Minion attacked = table.getCard(attackedC.getX(), attackedC.getY());
                 if (attacker.isFrozen()) {
-                    //TODO PRINT ERROR
+                    new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    //TODO PRINT ERROR
+                    new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
                     return;
                 }
                 if (attacker instanceof Disciple) {
-                    if (table.whichPlayer(attackedCord.getX()) != playerId) {
-                        //TODO PRINT ERROR
+                    if (table.whichPlayer(attackedC.getX()) != playerId) {
+                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_HEAL), gameMaster.output);
                         return;
                     }
                 } else {
-                    if (table.whichPlayer(attackedCord.getX()) == playerId) {
-                        //TODO PRINT ERROR
+                    if (table.whichPlayer(attackedC.getX()) == playerId) {
+                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK), gameMaster.output);
                         return;
                     }
                     if (!table.canAttack(playerId) && !attacked.isTank()) {
-                        //TODO PRINT ERROR
+                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
                         return;
                     }
                 }
                 ((SpecialCard)attacker).useAbility(attacked);
             }
 
-            public void useAttackHero(Coordinates attackerCord, int playerId) {
-                Minion attacker = table.getCard(attackerCord.getX(), attackerCord.getY());
+            public void useAttackHero(Coordinates attackerC, int playerId) {
+                Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
                 if (attacker.isFrozen()) {
-                    //TODO PRINT ERROR
+                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    //TODO PRINT ERROR
+                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
                     return;
                 }
                 if (table.canAttack(playerId)) {
-                    //TODO PRINT ERROR
+                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
                     return;
                 }
-                attacker.attack(gameMaster.getOtherPlayer(playerId).getHero());
+                attacker.attack((Attackable) gameMaster.getOtherPlayer(playerId).getHero());
             }
 
             public void useHeroAbility(int affectedRow, int playerId) {
-                Player currentPlayer = gameMaster.getPlayer(playerId);
-                if (currentPlayer.getMana() < currentPlayer.getHero().getMana()) {
-                    //TODO ERROR
+                Player player = gameMaster.getPlayer(playerId);
+                if (player.getMana() < player.getHero().getMana()) {
+                    new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_H), gameMaster.output);
                     return;
                 }
-                if (currentPlayer.getHero().hasAttacked()) {
-                    //TODO ERROR
+                if (player.getHero().hasAttacked()) {
+                    new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED_H), gameMaster.output);
                     return;
                 }
-                if (currentPlayer.getHero() instanceof LordRoyce || currentPlayer.getHero() instanceof EmpressThorina) {
+                if (player.getHero() instanceof LordRoyce || player.getHero() instanceof EmpressThorina) {
                     if (table.whichPlayer(affectedRow) == playerId) {
-                        //TODO ERROR
+                        new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY), gameMaster.output);
                         return;
                     }
                 } else {
                     if (table.whichPlayer(affectedRow) != playerId) {
-                        //TODO ERROR
+                        new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_PLAYER), gameMaster.output);
                         return;
                     }
                 }
 
-                currentPlayer.getHero().useAbility(table.getRow(affectedRow));
+                player.getHero().useAbility(table.getRow(affectedRow));
+                player.setMana(player.getMana() - player.getHero().getMana());
             }
 
-            public void useEnvironmentCard(int affectedRow, int playerId) {
-                Card card = gameMaster.getPlayer(playerId).getDeck().getCardFromHand(affectedRow);
+            public void useEnvironmentCard(int handIdx, int affectedRow, int playerId) {
+                Player player = gameMaster.getPlayer(playerId);
+                Card card = player.getDeck().getCardFromHand(handIdx);
                 if (!(card instanceof Environment)) {
-                    //TODO PRINT ERROR
+                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NOT_ENV), gameMaster.output);
                     return;
                 }
-                if (gameMaster.getPlayer(playerId).getMana() < card.getMana()) {
-                    //TODO PRINT ERROR
+                if (player.getMana() < card.getMana()) {
+                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_E), gameMaster.output);
                     return;
                 }
                 if (table.whichPlayer(affectedRow) == playerId) {
-                    //TODO PRINT ERROR
+                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY), gameMaster.output);
                     return;
                 }
                 if ((card instanceof HeartHound) && table.getRow(affectedRow).getNrOfCards() < 5) {
-                    //TODO PRINT ERROR
+                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.HEART_HOUND), gameMaster.output);
                     return;
                 }
                 ((Environment)card).useEnvAbility(table.getRow(affectedRow));
+                player.setMana(player.getMana() - player.getHero().getMana());
             }
         }
 

@@ -22,5 +22,6 @@ public class LordRoyce extends Hero{
             }
         }
         minion.frezze();
+        attacked = true;
     }
 }

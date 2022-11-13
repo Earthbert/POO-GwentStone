@@ -47,6 +47,10 @@ public class Player {
         return mana;
     }
 
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
     public void winGame() {
         totalGames++;
         gamesWon++;

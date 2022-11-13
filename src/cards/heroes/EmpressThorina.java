@@ -22,5 +22,6 @@ public class EmpressThorina extends Hero{
             }
         }
         minion.takeDamage(minion.getHealth());
+        attacked = true;
     }
 }

@@ -1,5 +1,3 @@
 package utils;
 
-public class ExceptionNoCommands extends Exception{
-
-}
+public class ExceptionNoCommands extends RuntimeException{}

@@ -4,10 +4,11 @@ import cards.Attackable;
 import cards.Card;
 import fileio.CardInput;
 import table.Row;
+import utils.ExceptionWonGame;
 
-public abstract class Hero extends Card implements Attackable {
+public abstract class Hero extends Card {
     private int health = 30;
-    private boolean attacked = false;
+    protected boolean attacked = false;
 
     public Hero(CardInput card) {
         super(card);
@@ -19,7 +20,8 @@ public abstract class Hero extends Card implements Attackable {
 
     public void takeDamage (int damage) {
         health -= damage;
-        //TODO THROW HERO DEAD
+        if (health <= 0)
+            throw new ExceptionWonGame();
     }
 
     public boolean hasAttacked() {
