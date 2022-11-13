@@ -14,6 +14,12 @@ public class GameMaster {
         return player[id];
     }
 
+    public Player getOtherPlayer(int id) {
+        if (player[id].playerId == 1)
+            return player[2];
+        return player[1];
+    }
+
     private Game currentGame;
     public Game getCurrentGame() {
         return currentGame;

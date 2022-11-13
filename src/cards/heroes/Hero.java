@@ -7,6 +7,7 @@ import table.Row;
 
 public abstract class Hero extends Card implements Attackable {
     private int health = 30;
+    private boolean attacked = false;
 
     public Hero(CardInput card) {
         super(card);
@@ -16,10 +17,14 @@ public abstract class Hero extends Card implements Attackable {
         return health;
     }
 
-    public boolean takeDamage (int damage) {
+    public void takeDamage (int damage) {
         health -= damage;
-        return health <= 0;
+        //TODO THROW HERO DEAD
     }
 
-    abstract void useAbility (Row row);
+    public boolean hasAttacked() {
+        return attacked;
+    }
+
+    public abstract void useAbility (Row row);
 }

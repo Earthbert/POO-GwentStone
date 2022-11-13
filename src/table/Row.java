@@ -21,6 +21,30 @@ public class Row {
         return cardsOnRow.size();
     }
 
+    public boolean isTankPlaced () {
+        for (Minion minion : cardsOnRow) {
+            if (minion.isTank())
+                return true;
+        }
+        return false;
+    }
+
+    boolean placeCard (Minion minion) {
+        if (cardsOnRow.size() >= 5)
+            return false;
+        cardsOnRow.add(minion);
+        minion.placedCard(this);
+        return true;
+    }
+
+    Minion getCard (int CardIdx) {
+        return cardsOnRow.get(CardIdx);
+    }
+
+    public void removeCard(Minion minion) {
+        cardsOnRow.remove(minion);
+    }
+
     /**
      * Prepare row for next turn.
      * Calls prepareCard.

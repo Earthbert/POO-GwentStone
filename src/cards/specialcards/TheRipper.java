@@ -9,7 +9,7 @@ public class TheRipper extends Minion implements SpecialCard{
     }
 
     @Override
-    public void useAbility(Minion subject) {
+    public boolean useAbility(Minion subject) {
 
     }
 }

@@ -3,12 +3,15 @@ package cards;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fileio.CardInput;
+import table.Row;
 import utils.UnitPos;
 import utils.UnitProp;
 
 public class Minion extends Card implements Attackable {
     protected int health;
     protected int attackDamage;
+
+    private Row row;
 
     @JsonIgnore
     private final UnitPos position;
@@ -61,6 +64,13 @@ public class Minion extends Card implements Attackable {
         return attacked;
     }
 
+    public UnitPos getPosition() {
+        return position;
+    }
+
+    public void placedCard(Row row) {
+        this.row = row;
+    }
 
     /**
      * Prepare card for next turn.
@@ -71,10 +81,11 @@ public class Minion extends Card implements Attackable {
         frozen = false;
     }
 
-    public boolean takeDamage(int damage) {
+    public void takeDamage(int damage) {
         health -= damage;
         attacked = true;
-        return health <= 0;
+        if(health <= 0)
+            row.removeCard(this);
     }
     
     public void attack(Attackable card) {

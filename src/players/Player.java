@@ -43,8 +43,8 @@ public class Player {
         return deck;
     }
 
-    public void setDeck(Deck deck) {
-        this.deck = deck;
+    public int getMana() {
+        return mana;
     }
 
     public void winGame() {
