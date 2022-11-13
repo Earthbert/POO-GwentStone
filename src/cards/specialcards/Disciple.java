@@ -9,7 +9,7 @@ public class Disciple extends Minion implements SpecialCard{
     }
 
     @Override
-    public boolean useAbility(Minion subject) {
-
+    public void useAbility(Minion subject) {
+        subject.setHealth(subject.getHealth() + 2);
     }
 }

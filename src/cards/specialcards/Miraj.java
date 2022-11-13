@@ -9,7 +9,9 @@ public class Miraj extends Minion implements SpecialCard{
     }
 
     @Override
-    public boolean useAbility(Minion subject) {
-
+    public void useAbility(Minion subject) {
+        int tmp = this.health;
+        this.health = subject.getHealth();
+        subject.setHealth(tmp);
     }
 }

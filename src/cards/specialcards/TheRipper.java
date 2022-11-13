@@ -9,7 +9,7 @@ public class TheRipper extends Minion implements SpecialCard{
     }
 
     @Override
-    public boolean useAbility(Minion subject) {
-
+    public void useAbility(Minion subject) {
+        subject.setAttackDamage(subject.getAttackDamage() - 2);
     }
 }
