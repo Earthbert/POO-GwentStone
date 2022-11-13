@@ -6,6 +6,7 @@ import cards.Minion;
 import cards.environmentcards.*;
 import cards.heroes.*;
 import cards.specialcards.*;;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import deck.Deck;
 import fileio.ActionsInput;
 import fileio.Coordinates;
@@ -13,11 +14,14 @@ import fileio.DecksInput;
 import fileio.GameInput;
 import game.errors.*;
 import game.errors.GameOver;
+import game.outputs.*;
 import players.Player;
+import table.Row;
 import table.Table;
 import utils.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Game {
@@ -55,7 +59,8 @@ public class Game {
     }
 
     void playTurn(int playerId) {
-        loop: while (true) {
+        loop:
+        while (true) {
             ActionsInput command = commands.get(cmdInx);
             cmdInx++;
             switch (CommandTypes.getType(command.getCommand())) {
@@ -83,7 +88,7 @@ public class Game {
                 return;
             } catch (ExceptionWonGame e) {
                 gameMaster.getPlayer(startingPlayer).winGame();
-                new GameOver(startingPlayer, gameMaster.output);
+                gameMaster.output.addPOJO(new GameOver(startingPlayer));
                 return;
             }
 
@@ -93,7 +98,7 @@ public class Game {
                 return;
             } catch (ExceptionWonGame e) {
                 gameMaster.getPlayer(secondPlayer).winGame();
-                new GameOver(secondPlayer, gameMaster.output);
+                gameMaster.output.addPOJO(new GameOver(secondPlayer));
                 return;
             }
 
@@ -111,11 +116,14 @@ public class Game {
             public void handle(ActionsInput command, int playerId) {
                 switch (command.getCommand()) {
                     case "placeCard" -> placeCard(command.getHandIdx(), playerId);
-                    case "cardUsesAttack" -> cardUsesAttack(command.getCardAttacker(), command.getCardAttacked(), playerId);
-                    case "cardUsesAbility" -> cardUsesAbility(command.getCardAttacker(), command.getCardAttacked(),playerId);
+                    case "cardUsesAttack" ->
+                        cardUsesAttack(command.getCardAttacker(), command.getCardAttacked(), playerId);
+                    case "cardUsesAbility" ->
+                        cardUsesAbility(command.getCardAttacker(), command.getCardAttacked(), playerId);
                     case "useAttackHero" -> useAttackHero(command.getCardAttacker(), playerId);
                     case "useHeroAbility" -> useHeroAbility(command.getAffectedRow(), playerId);
-                    case "useEnvironmentCard" -> useEnvironmentCard(command.getHandIdx(), command.getAffectedRow(), playerId);
+                    case "useEnvironmentCard" ->
+                        useEnvironmentCard(command.getHandIdx(), command.getAffectedRow(), playerId);
                 }
             }
 
@@ -123,15 +131,15 @@ public class Game {
                 Player player = gameMaster.getPlayer(playerId);
                 Card card = player.getDeck().getCardFromHand(handIdx);
                 if (card instanceof Environment) {
-                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.PLACE_ENV), gameMaster.output);
+                    gameMaster.output.addPOJO(new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.PLACE_ENV)));
                     return;
                 }
                 if (player.getMana() < card.getMana()) {
-                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.NO_MANA), gameMaster.output);
+                    gameMaster.output.addPOJO(new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.NO_MANA)));
                     return;
                 }
                 if (!table.placeCard((Minion) card, playerId)) {
-                    new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.FULL_ROW), gameMaster.output);
+                    gameMaster.output.addPOJO(new PlaceCardError(handIdx, ErrorTypes.getType(ErrorType.FULL_ROW)));
                     return;
                 }
                 player.getDeck().usedCard(handIdx);
@@ -142,19 +150,19 @@ public class Game {
                 Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
                 Minion attacked = table.getCard(attackedC.getX(), attackedC.getY());
                 if (attacker.isFrozen()) {
-                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER)));
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED)));
                     return;
                 }
                 if (table.whichPlayer(attackedC.getX()) == playerId) {
-                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK)));
                     return;
                 }
                 if (!table.canAttack(playerId) && !attacked.isTank()) {
-                    new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAttackError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK)));
                     return;
                 }
                 attacker.attack(attacked);
@@ -164,43 +172,43 @@ public class Game {
                 Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
                 Minion attacked = table.getCard(attackedC.getX(), attackedC.getY());
                 if (attacker.isFrozen()) {
-                    new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER)));
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
+                    gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED)));
                     return;
                 }
                 if (attacker instanceof Disciple) {
                     if (table.whichPlayer(attackedC.getX()) != playerId) {
-                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_HEAL), gameMaster.output);
+                        gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_HEAL)));
                         return;
                     }
                 } else {
                     if (table.whichPlayer(attackedC.getX()) == playerId) {
-                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK), gameMaster.output);
+                        gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.INVALID_ATTACK)));
                         return;
                     }
                     if (!table.canAttack(playerId) && !attacked.isTank()) {
-                        new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
+                        gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC, ErrorTypes.getType(ErrorType.NOT_TANK)));
                         return;
                     }
                 }
-                ((SpecialCard)attacker).useAbility(attacked);
+                ((SpecialCard) attacker).useAbility(attacked);
             }
 
             public void useAttackHero(Coordinates attackerC, int playerId) {
                 Minion attacker = table.getCard(attackerC.getX(), attackerC.getY());
                 if (attacker.isFrozen()) {
-                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.FROZEN_ATTACKER)));
                     return;
                 }
                 if (attacker.hasAttacked()) {
-                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED)));
                     return;
                 }
                 if (table.canAttack(playerId)) {
-                    new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.NOT_TANK), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseAttackHeroError(attackerC, ErrorTypes.getType(ErrorType.NOT_TANK)));
                     return;
                 }
                 attacker.attack((Attackable) gameMaster.getOtherPlayer(playerId).getHero());
@@ -209,21 +217,21 @@ public class Game {
             public void useHeroAbility(int affectedRow, int playerId) {
                 Player player = gameMaster.getPlayer(playerId);
                 if (player.getMana() < player.getHero().getMana()) {
-                    new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_H), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_H)));
                     return;
                 }
                 if (player.getHero().hasAttacked()) {
-                    new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED_H), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ALREADY_ATTACKED_H)));
                     return;
                 }
                 if (player.getHero() instanceof LordRoyce || player.getHero() instanceof EmpressThorina) {
                     if (table.whichPlayer(affectedRow) == playerId) {
-                        new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY), gameMaster.output);
+                        gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY)));
                         return;
                     }
                 } else {
                     if (table.whichPlayer(affectedRow) != playerId) {
-                        new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_PLAYER), gameMaster.output);
+                        gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, ErrorTypes.getType(ErrorType.ROW_PLAYER)));
                         return;
                     }
                 }
@@ -236,22 +244,22 @@ public class Game {
                 Player player = gameMaster.getPlayer(playerId);
                 Card card = player.getDeck().getCardFromHand(handIdx);
                 if (!(card instanceof Environment)) {
-                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NOT_ENV), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NOT_ENV)));
                     return;
                 }
                 if (player.getMana() < card.getMana()) {
-                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_E), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.NO_MANA_E)));
                     return;
                 }
                 if (table.whichPlayer(affectedRow) == playerId) {
-                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.ROW_ENEMY)));
                     return;
                 }
                 if ((card instanceof HeartHound) && table.getRow(affectedRow).getNrOfCards() < 5) {
-                    new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.HEART_HOUND), gameMaster.output);
+                    gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx, affectedRow, ErrorTypes.getType(ErrorType.HEART_HOUND)));
                     return;
                 }
-                ((Environment)card).useEnvAbility(table.getRow(affectedRow));
+                ((Environment) card).useEnvAbility(table.getRow(affectedRow));
                 player.setMana(player.getMana() - player.getHero().getMana());
             }
         }
@@ -259,52 +267,89 @@ public class Game {
         private class Output {
             public void handle(ActionsInput command, int playerId) {
                 switch (command.getCommand()) {
-                    case "getCardsInHand" -> getCardsInHand(command);
-                    case "getPlayerDeck" -> getPlayerDeck(command);
-                    case "getCardsOnTable" -> getCardsOnTable(command);
-                    case "getPlayerTurn" -> getPlayerTurn(command, playerId);
-                    case "getPlayerHero" -> getPlayerHero(command);
-                    case "getCardAtPosition" -> getCardAtPosition(command);
-                    case "getPlayerMana" -> getPlayerMana(command);
-                    case "getEnvironmentCardsInHand" -> getEnvironmentCardsInHand(command);
-                    case "getFrozenCardsOnTable" -> getFrozenCardsOnTable(command);
-                    case "getTotalGamesPlayed" -> getTotalGamesPlayed(command);
-                    case "getPlayerOneWins" -> getPlayerWins(command, 1);
-                    case "getPlayerTwoWins" -> getPlayerWins(command, 2);
+                    case "getCardsInHand" -> getCardsInHand(command.getPlayerIdx());
+                    case "getPlayerDeck" -> getPlayerDeck(command.getPlayerIdx());
+                    case "getCardsOnTable" -> getCardsOnTable();
+                    case "getPlayerTurn" -> getPlayerTurn(playerId);
+                    case "getPlayerHero" -> getPlayerHero(command.getPlayerIdx());
+                    case "getCardAtPosition" -> getCardAtPosition(command.getX(), command.getY());
+                    case "getPlayerMana" -> getPlayerMana(command.getPlayerIdx());
+                    case "getEnvironmentCardsInHand" -> getEnvironmentCardsInHand(command.getPlayerIdx());
+                    case "getFrozenCardsOnTable" -> getFrozenCardsOnTable();
+                    case "getTotalGamesPlayed" -> getTotalGamesPlayed();
+                    case "getPlayerOneWins" -> getPlayerWins(1);
+                    case "getPlayerTwoWins" -> getPlayerWins(2);
                 }
             }
 
-            private void getCardsInHand(ActionsInput command) {
+            private void getCardsInHand(int playerId) {
+                List<Card> cards = gameMaster.getPlayer(playerId).getDeck().getCardsOnHand();
+                gameMaster.output.addPOJO(new GetCardsInHandOutput(playerId, cards));
             }
 
-            private void getPlayerDeck(ActionsInput command) {
+            private void getPlayerDeck(int playerId) {
+                List<Card> cards = gameMaster.getPlayer(playerId).getDeck().getCardsOnDeck();
+                gameMaster.output.addPOJO(new GetPlayerDeckOutput(playerId, cards));
             }
 
-            private void getCardsOnTable(ActionsInput command) {
+            private void getCardsOnTable() {
+                List<Card> cards = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    Row row = table.getRow(i);
+                    cards.addAll(row.getCardsOnRow());
+                }
+                gameMaster.output.addPOJO(new GetCardsOnTableOutput(cards));
             }
 
-            private void getPlayerTurn(ActionsInput command, int playerId) {
+            private void getPlayerTurn(int playerId) {
+                gameMaster.output.addPOJO(new GetPlayerTurnOutput(playerId));
             }
 
-            private void getPlayerHero(ActionsInput command) {
+            private void getPlayerHero(int playerId) {
+                Hero hero = gameMaster.getPlayer(playerId).getHero();
+                gameMaster.output.addPOJO(new GetPlayerHeroOutput(playerId, hero));
             }
 
-            private void getPlayerMana(ActionsInput command) {
+            private void getCardAtPosition(int rowNr, int cardIdx) {
+                Card card = table.getCard(rowNr, cardIdx);
+                gameMaster.output.addPOJO(new GetCardAtPositionOutput(rowNr, cardIdx, card));
             }
 
-            private void getEnvironmentCardsInHand(ActionsInput command) {
+            private void getPlayerMana(int playerId) {
+                int mana = gameMaster.getPlayer(playerId).getMana();
+                gameMaster.output.addPOJO(new GetPlayerManaOutput(playerId, mana));
             }
 
-            private void getFrozenCardsOnTable(ActionsInput command) {
+            private void getEnvironmentCardsInHand(int playerId) {
+                List<Card> cards = new ArrayList<>();
+                for (Card card : gameMaster.getPlayer(playerId).getDeck().getCardsOnHand()) {
+                    if (card instanceof Environment) {
+                        cards.add(card);
+                    }
+                }
+                gameMaster.output.addPOJO(new GetEnvironmentCardsInHandOutput(playerId, cards));
             }
 
-            private void getTotalGamesPlayed(ActionsInput command) {
+            private void getFrozenCardsOnTable() {
+                List<Card> cards = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    Row row = table.getRow(i);
+                    for (Minion card : row.getCardsOnRow()) {
+                        if (card.isFrozen())
+                            cards.add(card);
+                    }
+                    gameMaster.output.addPOJO(new GetFrozenCardsOnTableOutput(cards));
+                }
             }
 
-            private void getPlayerWins(ActionsInput command, int playerId) {
+            private void getTotalGamesPlayed() {
+                int totalGames = gameMaster.getPlayer(1).getTotalGames();
+                gameMaster.output.addPOJO(new GetTotalGamesPlayedOutput(totalGames));
             }
 
-            private void getCardAtPosition(ActionsInput command) {
+            private void getPlayerWins(int playerId) {
+                int gamesWon = gameMaster.getPlayer(playerId).getGamesWon();
+                gameMaster.output.addPOJO(new GetPlayerWinsOutput(playerId, gamesWon));
             }
 
         }

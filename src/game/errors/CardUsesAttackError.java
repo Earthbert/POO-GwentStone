@@ -1,6 +1,5 @@
 package game.errors;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.Coordinates;
 
 public class CardUsesAttackError {
@@ -9,11 +8,10 @@ public class CardUsesAttackError {
     private final Coordinates cardAttacked;
     private final String error;
 
-    public CardUsesAttackError(Coordinates cardAttacker, Coordinates cardAttacked, String error, ArrayNode output) {
+    public CardUsesAttackError(Coordinates cardAttacker, Coordinates cardAttacked, String error) {
         this.cardAttacker = cardAttacker;
         this.cardAttacked = cardAttacked;
         this.error = error;
-        output.addPOJO(this);
     }
 
     public String getCommand() {

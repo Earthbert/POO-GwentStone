@@ -7,10 +7,9 @@ public class UseHeroAbilityError {
     private final int affectedRow;
     private final String error;
 
-    public UseHeroAbilityError (int affectedRow, String error, ArrayNode output) {
+    public UseHeroAbilityError (int affectedRow, String error) {
            this.affectedRow = affectedRow;
            this.error = error;
-           output.addPOJO(this);
     }
 
     public String getCommand() {

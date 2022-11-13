@@ -59,6 +59,14 @@ public class Deck {
         cardsOnHand.remove(cardIdx);
     }
 
+    public List<Card> getCardsOnDeck() {
+        return cardsOnDeck;
+    }
+
+    public List<Card> getCardsOnHand() {
+        return cardsOnHand;
+    }
+
     public void prepareDeck() {
         if (!cardsOnDeck.isEmpty())
             cardsOnHand.add(cardsOnDeck.remove(0));
