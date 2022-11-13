@@ -1,7 +1,10 @@
 package cards.heroes;
 
+import cards.Minion;
 import fileio.CardInput;
 import table.Row;
+
+import java.util.List;
 
 public class EmpressThorina extends Hero{
 
@@ -10,7 +13,14 @@ public class EmpressThorina extends Hero{
     }
 
     @Override
-    void useAbility(Row row) {
-
+    public void useAbility(Row row) {
+        List<Minion> minions = row.getCardsOnRow();
+        Minion minion = minions.get(0);
+        for (Minion m : row.getCardsOnRow()) {
+            if (minion.getHealth() <= m.getHealth()) {
+                minion = m;
+            }
+        }
+        minion.takeDamage(minion.getHealth());
     }
 }

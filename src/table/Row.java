@@ -17,6 +17,10 @@ public class Row {
         this.type = type;
     }
 
+    public List<Minion> getCardsOnRow() {
+        return cardsOnRow;
+    }
+
     public int getNrOfCards () {
         return cardsOnRow.size();
     }
