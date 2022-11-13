@@ -9,12 +9,14 @@ import java.util.List;
 public class Row {
     private List<Minion> cardsOnRow = new LinkedList<>();
 
-    final int player;
+    public final Table table;
+    public final int player;
     final UnitPos type;
 
-    public Row(int player, UnitPos type) {
+    public Row(int player, UnitPos type, Table table) {
         this.player = player;
         this.type = type;
+        this.table = table;
     }
 
     public List<Minion> getCardsOnRow() {

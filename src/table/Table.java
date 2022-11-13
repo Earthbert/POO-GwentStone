@@ -11,10 +11,10 @@ public class Table {
     final Row[] rows = new Row[4];
 
     public Table() {
-        rows[0] = new Row(2, RANGED);
-        rows[1] = new Row(2, UnitPos.CLOSE);
-        rows[2] = new Row(1, UnitPos.CLOSE);
-        rows[3] = new Row(1, RANGED);
+        rows[0] = new Row(2, RANGED, this);
+        rows[1] = new Row(2, UnitPos.CLOSE, this);
+        rows[2] = new Row(1, UnitPos.CLOSE, this);
+        rows[3] = new Row(1, RANGED, this);
     }
 
     public boolean canAttack(int playerId) {
