@@ -20,17 +20,12 @@ public class GameMaster {
         return player[1];
     }
 
-    private Game currentGame;
-    public Game getCurrentGame() {
-        return currentGame;
-    }
-
     public void entry(Input inputData, ArrayNode output) {
         player[1] = new Player(1);
         player[2] = new Player(2);
+        this.output = output;
         for (GameInput gameInput : inputData.getGames()) {
-            this.output = output;
-            currentGame = new Game(gameInput, inputData.getPlayerOneDecks(), inputData.getPlayerTwoDecks(), this);
+            Game currentGame = new Game(gameInput, inputData.getPlayerOneDecks(), inputData.getPlayerTwoDecks(), this);
             currentGame.play();
         }
     }

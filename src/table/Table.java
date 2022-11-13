@@ -61,6 +61,9 @@ public class Table {
         if (playerId == 1) {
             rows[2].prepareRow();
             rows[3].prepareRow();
+        } else {
+            rows[0].prepareRow();
+            rows[1].prepareRow();
         }
     }
 }

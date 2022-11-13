@@ -12,8 +12,10 @@ public class Firestorm extends Card implements Environment {
 
     @Override
     public void useEnvAbility(Row row) {
-        for (Minion m : row.getCardsOnRow()) {
-            m.setHealth(m.getHealth() - 1);
+        for (int i = 0; i < row.getCardsOnRow().size(); ) {
+            Minion m = row.getCardsOnRow().get(i);
+            if (!m.takeDamage(1))
+                i++;
         }
     }
 }

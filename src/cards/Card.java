@@ -1,5 +1,7 @@
 package cards;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fileio.CardInput;
 
 import java.util.ArrayList;
@@ -10,13 +12,18 @@ public abstract class Card {
     protected final ArrayList<String> colors;
     protected int mana;
 
-    private boolean usedCard = false;
-
     public Card(CardInput card) {
         this.name = card.getName();
         this.description = card.getDescription();
         this.colors = card.getColors();
         this.mana = card.getMana();
+    }
+
+    public Card(Card copied) {
+        this.name = copied.name;
+        this.description = copied.description;
+        this.colors = copied.colors;
+        this.mana = copied.mana;
     }
 
     public String getName() {

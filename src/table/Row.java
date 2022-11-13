@@ -3,6 +3,7 @@ package table;
 import cards.Minion;
 import utils.UnitPos;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,14 @@ public class Row {
         this.player = player;
         this.type = type;
         this.table = table;
+    }
+
+    public List<Minion> copyOfCards() {
+        List<Minion> cards = new ArrayList<>();
+        for (Minion m : cardsOnRow) {
+            cards.add(new Minion(m));
+        }
+        return cards;
     }
 
     public List<Minion> getCardsOnRow() {

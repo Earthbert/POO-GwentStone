@@ -1,5 +1,5 @@
 package cards;
 
 public interface Attackable {
-    void takeDamage(int damage);
+    boolean takeDamage(int damage);
 }

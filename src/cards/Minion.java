@@ -1,11 +1,13 @@
 package cards;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fileio.CardInput;
 import table.Row;
 import utils.UnitPos;
 import utils.UnitProp;
 
+@JsonPropertyOrder(value = {"mana", "attackDamage", "health", "description", "colors", "name"} )
 public class Minion extends Card implements Attackable {
     protected int health;
     protected int attackDamage;
@@ -31,6 +33,17 @@ public class Minion extends Card implements Attackable {
         this.attackDamage = card.getAttackDamage();
     }
 
+    public Minion(Minion copied) {
+        super(copied);
+        this.health = copied.health;
+        this.attackDamage = copied.attackDamage;
+        this.row = copied.row;
+        this.position = copied.position;
+        this.tank = copied.tank;
+        this.attacked = copied.attacked;
+        this.frozen = copied.frozen;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -51,7 +64,7 @@ public class Minion extends Card implements Attackable {
         return frozen;
     }
 
-    public void frezze() {
+    public void freeze() {
         frozen = true;
     }
 
@@ -80,14 +93,17 @@ public class Minion extends Card implements Attackable {
         frozen = false;
     }
 
-    public void takeDamage(int damage) {
+    public boolean takeDamage(int damage) {
         health -= damage;
-        attacked = true;
-        if(health <= 0)
+        if(health <= 0) {
             row.removeCard(this);
+            return true;
+        }
+        return false;
     }
     
     public void attack(Attackable card) {
         card.takeDamage(attackDamage);
+        this.attacked = true;
     }
 }

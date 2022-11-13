@@ -18,7 +18,7 @@ public class HeartHound extends Card implements Environment {
         List<Minion> minions = row.getCardsOnRow();
         Minion minion = minions.get(0);
         for (Minion m : minions) {
-            if (minion.getHealth() <= m.getHealth()) {
+            if (minion.getHealth() < m.getHealth()) {
                 minion = m;
             }
         }
