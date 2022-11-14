@@ -4,19 +4,20 @@ public class GetPlayerWinsOutput {
     private final String command;
     private final int output;
 
-    public GetPlayerWinsOutput(int playerIdx, int output) {
-        if (playerIdx == 1)
+    public GetPlayerWinsOutput(final int playerIdx, final int output) {
+        if (playerIdx == 1) {
             command = "getPlayerOneWins";
-        else
+        } else {
             command = "getPlayerTwoWins";
+        }
         this.output = output;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getOutput() {
+    public final int getOutput() {
         return output;
     }
 }

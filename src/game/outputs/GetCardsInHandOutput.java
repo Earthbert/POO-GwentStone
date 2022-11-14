@@ -11,24 +11,24 @@ public class GetCardsInHandOutput {
     private final int playerIdx;
     private final List<Card> cards;
 
-    public GetCardsInHandOutput(int playerIdx, List<Card> cards) {
+    public GetCardsInHandOutput(final int playerIdx, final List<Card> cards) {
         this.playerIdx = playerIdx;
         this.cards = new ArrayList<>();
-        for (Card card : cards) {
+        for (final Card card : cards) {
             this.cards.add(card.clone());
         }
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getPlayerIdx() {
+    public final int getPlayerIdx() {
         return playerIdx;
     }
 
     @JsonGetter("output")
-    public List<Card> getCards() {
+    public final List<Card> getCards() {
         return cards;
     }
 }

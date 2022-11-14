@@ -1,26 +1,24 @@
 package game.errors;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-
 public class UseHeroAbilityError {
     private final String command = "useHeroAbility";
     private final int affectedRow;
     private final String error;
 
-    public UseHeroAbilityError (int affectedRow, String error) {
+    public UseHeroAbilityError(final int affectedRow, final String error) {
            this.affectedRow = affectedRow;
            this.error = error;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getAffectedRow() {
+    public final int getAffectedRow() {
         return affectedRow;
     }
 
-    public String getError() {
+    public final String getError() {
         return error;
     }
 }

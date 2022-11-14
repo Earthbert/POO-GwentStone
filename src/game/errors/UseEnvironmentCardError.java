@@ -6,25 +6,25 @@ public class UseEnvironmentCardError {
     private final int affectedRow;
     private final String error;
 
-    public UseEnvironmentCardError (int handIdx, int affectedRow, String error) {
+    public UseEnvironmentCardError(final int handIdx, final int affectedRow, final String error) {
         this.handIdx = handIdx;
         this.affectedRow = affectedRow;
         this.error = error;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getHandIdx() {
+    public final int getHandIdx() {
         return handIdx;
     }
 
-    public int getAffectedRow() {
+    public final int getAffectedRow() {
         return affectedRow;
     }
 
-    public String getError() {
+    public final String getError() {
         return error;
     }
 }

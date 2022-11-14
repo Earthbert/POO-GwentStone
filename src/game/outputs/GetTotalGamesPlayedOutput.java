@@ -4,15 +4,15 @@ public class GetTotalGamesPlayedOutput {
     private final String command = "getTotalGamesPlayed";
     private final int output;
 
-    public GetTotalGamesPlayedOutput(int output) {
+    public GetTotalGamesPlayedOutput(final int output) {
         this.output = output;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getOutput() {
+    public final int getOutput() {
         return output;
     }
 }

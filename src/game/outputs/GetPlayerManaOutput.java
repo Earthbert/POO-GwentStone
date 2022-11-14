@@ -7,21 +7,21 @@ public class GetPlayerManaOutput {
     private final int playerIdx;
     private final int mana;
 
-    public GetPlayerManaOutput(int playerIdx, int mana) {
+    public GetPlayerManaOutput(final int playerIdx, final int mana) {
         this.playerIdx = playerIdx;
         this.mana = mana;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getPlayerIdx() {
+    public final int getPlayerIdx() {
         return playerIdx;
     }
 
     @JsonGetter("output")
-    public int getMana() {
+    public final int getMana() {
         return mana;
     }
 }

@@ -1,55 +1,52 @@
 package cards;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fileio.CardInput;
 
 import java.util.ArrayList;
 
+/**
+ * The type Card.
+ */
 public abstract class Card {
-    protected String name;
+    protected final String name;
     protected final String description;
     protected final ArrayList<String> colors;
-    protected int mana;
+    protected final int mana;
 
-    public Card(CardInput card) {
+    public Card(final CardInput card) {
         this.name = card.getName();
         this.description = card.getDescription();
         this.colors = card.getColors();
         this.mana = card.getMana();
     }
 
-    protected Card(Card copied) {
-        this.name = copied.name;
-        this.description = copied.description;
-        this.colors = copied.colors;
-        this.mana = copied.mana;
+    protected Card(final Card card) {
+        this.name = card.name;
+        this.description = card.description;
+        this.colors = card.colors;
+        this.mana = card.mana;
     }
 
+    /**
+     * Creates a deep copy of a card.
+     * Uses private / protected copy constructor.
+     * @return new Card
+     */
     public abstract Card clone();
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
-    public ArrayList<String> getColors() {
+    public final ArrayList<String> getColors() {
         return colors;
     }
 
-    public int getMana() {
+    public final int getMana() {
         return mana;
     }
-
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
-
 }

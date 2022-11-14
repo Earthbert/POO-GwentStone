@@ -1,4 +1,4 @@
-package utils;
+package helpers;
 
 public enum ErrorType {
     PLACE_ENV,

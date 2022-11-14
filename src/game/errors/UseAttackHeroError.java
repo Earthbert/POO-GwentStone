@@ -7,20 +7,20 @@ public class UseAttackHeroError {
     private final Coordinates cardAttacker;
     private final String error;
 
-    public UseAttackHeroError(Coordinates cardAttacker, String error) {
+    public UseAttackHeroError(final Coordinates cardAttacker, final String error) {
         this.cardAttacker = cardAttacker;
         this.error = error;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public Coordinates getCardAttacker() {
+    public final Coordinates getCardAttacker() {
         return cardAttacker;
     }
 
-    public String getError() {
+    public final String getError() {
         return error;
     }
 }

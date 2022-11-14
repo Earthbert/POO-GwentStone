@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
 import fileio.Input;
-import game.Game;
 import game.GameMaster;
 
 import java.io.File;
@@ -34,22 +33,22 @@ public final class Main {
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void main(final String[] args) throws IOException {
-        File directory = new File(CheckerConstants.TESTS_PATH);
-        Path path = Paths.get(CheckerConstants.RESULT_PATH);
+        final File directory = new File(CheckerConstants.TESTS_PATH);
+        final Path path = Paths.get(CheckerConstants.RESULT_PATH);
 
         if (Files.exists(path)) {
-            File resultFile = new File(String.valueOf(path));
-            for (File file : Objects.requireNonNull(resultFile.listFiles())) {
+            final File resultFile = new File(String.valueOf(path));
+            for (final File file : Objects.requireNonNull(resultFile.listFiles())) {
                 file.delete();
             }
             resultFile.delete();
         }
         Files.createDirectories(path);
 
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            String filepath = CheckerConstants.OUT_PATH + file.getName();
-            File out = new File(filepath);
-            boolean isCreated = out.createNewFile();
+        for (final File file : Objects.requireNonNull(directory.listFiles())) {
+            final String filepath = CheckerConstants.OUT_PATH + file.getName();
+            final File out = new File(filepath);
+            final boolean isCreated = out.createNewFile();
             if (isCreated) {
                 action(file.getName(), filepath);
             }
@@ -65,16 +64,16 @@ public final class Main {
      */
     public static void action(final String filePath1,
                               final String filePath2) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Input inputData = objectMapper.readValue(new File(CheckerConstants.TESTS_PATH + filePath1),
-                Input.class);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final Input inputData = objectMapper.readValue(
+            new File(CheckerConstants.TESTS_PATH + filePath1), Input.class);
 
-        ArrayNode output = objectMapper.createArrayNode();
+        final ArrayNode output = objectMapper.createArrayNode();
 
-        GameMaster games = new GameMaster();
+        final GameMaster games = new GameMaster();
         games.entry(inputData, output);
 
-        ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
+        final ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
     }
 }

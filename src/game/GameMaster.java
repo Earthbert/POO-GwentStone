@@ -6,36 +6,60 @@ import fileio.Input;
 import players.Player;
 
 public class GameMaster {
+    private static final int NR_PLAYERS = 3;
+
     ArrayNode output;
 
     private int totalGames = 0;
-    private final Player[] player = new Player[3];
+    private final Player[] player = new Player[NR_PLAYERS];
 
-    public Player getPlayer(int id) {
+    /**
+     * Given an Index returns player with corresponding index.
+     * @param id Player Index
+     * @return Player
+     */
+    public Player getPlayer(final int id) {
         return player[id];
     }
 
-    public Player getEnemyPlayerPlayer(int id) {
-        if (player[id].playerId == 1)
+    /**
+     * Given an Index returns enemy of that player.
+     * @param id Player Index
+     * @return Enemy Player
+     */
+    public Player getEnemyPlayerPlayer(final int id) {
+        if (id == 1) {
             return player[2];
+        }
         return player[1];
     }
 
-    public void winGame(int playerId) {
+    /**
+     * Updates stats when a player wins.
+     * @param playerId Winning player index.
+     */
+    public void winGame(final int playerId) {
         totalGames++;
         player[playerId].winGame();
     }
 
-    public int getTotalGames() {
+    public final int getTotalGames() {
         return totalGames;
     }
 
-    public void entry(Input inputData, ArrayNode output) {
+    /**
+     * Generates games between to player.
+     * Players are create at the call
+     * @param inputData Input data
+     * @param arrayNode where to print output
+     */
+    public void entry(final Input inputData, final ArrayNode arrayNode) {
         player[1] = new Player(1);
         player[2] = new Player(2);
-        this.output = output;
-        for (GameInput gameInput : inputData.getGames()) {
-            Game currentGame = new Game(gameInput, inputData.getPlayerOneDecks(), inputData.getPlayerTwoDecks(), this);
+        this.output = arrayNode;
+        for (final GameInput gameInput : inputData.getGames()) {
+            final Game currentGame = new Game(gameInput, inputData.getPlayerOneDecks(),
+                inputData.getPlayerTwoDecks(), this);
             currentGame.play();
         }
     }

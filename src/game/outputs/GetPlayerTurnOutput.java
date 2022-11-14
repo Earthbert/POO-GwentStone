@@ -6,16 +6,16 @@ public class GetPlayerTurnOutput {
     private final String command = "getPlayerTurn";
     private final int activePlayer;
 
-    public GetPlayerTurnOutput(int activePlayer) {
+    public GetPlayerTurnOutput(final int activePlayer) {
         this.activePlayer = activePlayer;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
     @JsonGetter("output")
-    public int getActivePlayer() {
+    public final int getActivePlayer() {
         return activePlayer;
     }
 }

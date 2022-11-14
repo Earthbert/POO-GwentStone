@@ -7,26 +7,37 @@ import table.Row;
 
 import java.util.List;
 
-public class LordRoyce extends Hero{
+public class LordRoyce extends Hero {
 
-    public LordRoyce(CardInput card) {
+    public LordRoyce(final CardInput card) {
         super(card);
     }
 
-    private LordRoyce(Card card) {
+    private LordRoyce(final Card card) {
         super((Hero) card);
     }
 
+    /**
+     * Creates a deep copy of a LordRoyce card.
+     * Uses private copy constructor.
+     *
+     * @return new Card
+     */
     @Override
     public Card clone() {
         return new LordRoyce(this);
     }
 
+    /**
+     * Use ability of hero cards.
+     * Freezes the cards with the most damageAttack.
+     * @param row affected row
+     */
     @Override
-    public void useAbility(Row row) {
-        List<Minion> minions = row.getCardsOnRow();
+    public void useAbility(final Row row) {
+        final List<Minion> minions = row.getCardsOnRow();
         Minion minion = minions.get(0);
-        for (Minion m : minions) {
+        for (final Minion m : minions) {
             if (minion.getAttackDamage() <= m.getAttackDamage()) {
                 minion = m;
             }

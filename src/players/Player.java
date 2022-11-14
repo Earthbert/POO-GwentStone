@@ -1,11 +1,15 @@
 package players;
 
-import cards.heroes.*;
+import cards.heroes.EmpressThorina;
+import cards.heroes.LordRoyce;
+import cards.heroes.KingMudface;
+import cards.heroes.GeneralKocioraw;
+import cards.heroes.Hero;
 import deck.Deck;
 import fileio.CardInput;
 
 public class Player {
-    public final int playerId;
+    private final int playerId;
 
     private int mana;
 
@@ -14,47 +18,55 @@ public class Player {
     private Hero hero;
     private Deck deck;
 
-    public void startGame(CardInput hero, Deck deck) {
+    /**
+     * Prepares player for a new game.
+     * @param cardInput Hero Input.
+     * @param deckSelected Deck of cards.
+     */
+    public void startGame(final CardInput cardInput, final Deck deckSelected) {
         this.mana = 0;
-        this.deck = deck;
-        this.hero = switch (hero.getName()) {
-            case "Lord Royce" -> new LordRoyce(hero);
-            case "Empress Thorina" -> new EmpressThorina(hero);
-            case "King Mudface" -> new KingMudface(hero);
-            case "General Kocioraw" -> new GeneralKocioraw(hero);
+        this.deck = deckSelected;
+        this.hero = switch (cardInput.getName()) {
+            case "Lord Royce" -> new LordRoyce(cardInput);
+            case "Empress Thorina" -> new EmpressThorina(cardInput);
+            case "King Mudface" -> new KingMudface(cardInput);
+            case "General Kocioraw" -> new GeneralKocioraw(cardInput);
             default -> null;
         };
     }
 
-    public Player(int playerId) {
+    public Player(final int playerId) {
         this.playerId = playerId;
     }
 
-    public Hero getHero() {
+    public final Hero getHero() {
         return hero;
     }
 
-    public void setHero(Hero hero) {
+    public final void setHero(final Hero hero) {
         this.hero = hero;
     }
 
-    public Deck getDeck() {
+    public final Deck getDeck() {
         return deck;
     }
 
-    public int getMana() {
+    public final int getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    public final void setMana(final int mana) {
         this.mana = mana;
     }
 
+    /**
+     * Update gamesWon field when player wins a game.
+     */
     public void winGame() {
         gamesWon++;
     }
 
-    public int getGamesWon() {
+    public final int getGamesWon() {
         return gamesWon;
     }
 
@@ -63,7 +75,7 @@ public class Player {
      *
      * @param manaGain the mana gain
      */
-    public void preparePlayer(int manaGain) {
+    public void preparePlayer(final int manaGain) {
         mana += manaGain;
         deck.prepareDeck();
     }

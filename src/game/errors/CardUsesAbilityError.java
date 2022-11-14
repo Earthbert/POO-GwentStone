@@ -8,25 +8,26 @@ public class CardUsesAbilityError {
     private final Coordinates cardAttacked;
     private final String error;
 
-    public CardUsesAbilityError(Coordinates cardAttacker, Coordinates cardAttacked, String error) {
+    public CardUsesAbilityError(final Coordinates cardAttacker,
+                                final Coordinates cardAttacked, final String error) {
         this.cardAttacker = cardAttacker;
         this.cardAttacked = cardAttacked;
         this.error = error;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public Coordinates getCardAttacker() {
+    public final Coordinates getCardAttacker() {
         return cardAttacker;
     }
 
-    public Coordinates getCardAttacked() {
+    public final Coordinates getCardAttacked() {
         return cardAttacked;
     }
 
-    public String getError() {
+    public final String getError() {
         return error;
     }
 }

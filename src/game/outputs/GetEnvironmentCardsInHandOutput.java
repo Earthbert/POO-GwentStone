@@ -10,21 +10,21 @@ public class GetEnvironmentCardsInHandOutput {
     private final int playerIdx;
     private final List<Card> cards;
 
-    public GetEnvironmentCardsInHandOutput(int playerIdx, List<Card> cards) {
+    public GetEnvironmentCardsInHandOutput(final int playerIdx, final List<Card> cards) {
         this.playerIdx = playerIdx;
         this.cards = cards;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getPlayerIdx() {
+    public final int getPlayerIdx() {
         return playerIdx;
     }
 
     @JsonGetter("output")
-    public List<Card> getCards() {
+    public final List<Card> getCards() {
         return cards;
     }
 }

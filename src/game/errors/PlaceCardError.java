@@ -5,20 +5,20 @@ public class PlaceCardError {
     private final int handIdx;
     private final String error;
 
-    public PlaceCardError(int handIdx, String error) {
+    public PlaceCardError(final int handIdx, final String error) {
         this.handIdx = handIdx;
         this.error = error;
     }
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public int getHandIdx() {
+    public final int getHandIdx() {
         return handIdx;
     }
 
-    public String getError() {
+    public final String getError() {
         return error;
     }
 }
