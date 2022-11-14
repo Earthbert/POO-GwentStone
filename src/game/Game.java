@@ -88,7 +88,7 @@ public class Game {
             } catch (ExceptionNoCommands e) {
                 return;
             } catch (ExceptionWonGame e) {
-                gameMaster.getPlayer(startingPlayer).winGame();
+                gameMaster.winGame(startingPlayer);
                 gameMaster.output.addPOJO(new GameOver(startingPlayer));
                 return;
             }
@@ -98,7 +98,7 @@ public class Game {
             } catch (ExceptionNoCommands e) {
                 return;
             } catch (ExceptionWonGame e) {
-                gameMaster.getPlayer(secondPlayer).winGame();
+                gameMaster.winGame(secondPlayer);
                 gameMaster.output.addPOJO(new GameOver(secondPlayer));
                 return;
             }
@@ -285,7 +285,7 @@ public class Game {
             }
 
             private void getCardsInHand(int playerId) {
-                List<Card> cards = new ArrayList<>(gameMaster.getPlayer(playerId).getDeck().getCardsOnHand());
+                List<Card> cards = gameMaster.getPlayer(playerId).getDeck().getCardsOnHand();
                 gameMaster.output.addPOJO(new GetCardsInHandOutput(playerId, cards));
             }
 
@@ -345,7 +345,7 @@ public class Game {
             }
 
             private void getTotalGamesPlayed() {
-                int totalGames = gameMaster.getPlayer(1).getTotalGames();
+                int totalGames = gameMaster.getTotalGames();
                 gameMaster.output.addPOJO(new GetTotalGamesPlayedOutput(totalGames));
             }
 

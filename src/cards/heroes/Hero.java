@@ -26,11 +26,10 @@ public abstract class Hero extends Card implements Attackable {
         return health;
     }
 
-    public boolean takeDamage (int damage) {
+    public void takeDamage (int damage) {
         health -= damage;
         if (health <= 0)
             throw new ExceptionWonGame();
-        return false;
     }
 
     public void prepareHero() {

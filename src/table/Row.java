@@ -53,6 +53,8 @@ public class Row {
     }
 
     Minion getCard (int CardIdx) {
+        if (CardIdx >= cardsOnRow.size())
+            return null;
         return cardsOnRow.get(CardIdx);
     }
 

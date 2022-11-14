@@ -42,6 +42,7 @@ public class Deck {
                 case "Environment" -> createEnvCard(cardInput);
                 case "none" -> System.out.println("Invalid Card");
             }
+
         }
         Random rnd = new Random(shuffleSeed);
         Collections.shuffle(cardsOnDeck, rnd);

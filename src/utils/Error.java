@@ -14,7 +14,7 @@ public class Error {
         errorStrings.put(INVALID_ATTACK, "Attacked card does not belong to the enemy.");
         errorStrings.put(ALREADY_ATTACKED, "Attacker card has already attacked this turn.");
         errorStrings.put(FROZEN_ATTACKER, "Attacker card is frozen.");
-        errorStrings.put(NOT_TANK, "Attacked card is not of type 'Tank’.");
+        errorStrings.put(NOT_TANK, "Attacked card is not of type 'Tank'.");
         errorStrings.put(INVALID_HEAL, "Attacked card does not belong to the current player.");
         errorStrings.put(NO_MANA_H, "Not enough mana to use hero's ability.");
         errorStrings.put(ALREADY_ATTACKED_H, "Hero has already attacked this turn.");

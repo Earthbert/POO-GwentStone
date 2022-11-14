@@ -8,6 +8,7 @@ import players.Player;
 public class GameMaster {
     ArrayNode output;
 
+    private int totalGames = 0;
     private final Player[] player = new Player[3];
 
     public Player getPlayer(int id) {
@@ -18,6 +19,15 @@ public class GameMaster {
         if (player[id].playerId == 1)
             return player[2];
         return player[1];
+    }
+
+    public void winGame(int playerId) {
+        totalGames++;
+        player[playerId].winGame();
+    }
+
+    public int getTotalGames() {
+        return totalGames;
     }
 
     public void entry(Input inputData, ArrayNode output) {

@@ -93,13 +93,10 @@ public class Minion extends Card implements Attackable {
         frozen = false;
     }
 
-    public boolean takeDamage(int damage) {
+    public void takeDamage(int damage) {
         health -= damage;
-        if(health <= 0) {
+        if(health <= 0)
             row.removeCard(this);
-            return true;
-        }
-        return false;
     }
     
     public void attack(Attackable card) {

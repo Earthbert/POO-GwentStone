@@ -14,7 +14,7 @@ public class GetCardAtPositionOutput {
         if (card != null)
             this.output = new Minion((Minion) card);
         else
-            output = "No card at that position.";
+            output = "No card available at that position.";
     }
 
     public String getCommand() {

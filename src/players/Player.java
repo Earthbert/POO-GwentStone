@@ -9,7 +9,6 @@ public class Player {
 
     private int mana;
 
-    private int totalGames = 0;
     private int gamesWon = 0;
 
     private Hero hero;
@@ -52,12 +51,7 @@ public class Player {
     }
 
     public void winGame() {
-        totalGames++;
         gamesWon++;
-    }
-
-    public int getTotalGames() {
-        return totalGames;
     }
 
     public int getGamesWon() {
