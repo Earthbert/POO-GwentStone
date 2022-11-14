@@ -13,5 +13,6 @@ public class TheCursedOne extends Minion implements SpecialCard{
         int tmp = subject.getAttackDamage();
         subject.setAttackDamage(subject.getHealth());
         subject.setHealth(tmp);
+        attacked = true;
     }
 }

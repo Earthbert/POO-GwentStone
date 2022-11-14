@@ -11,5 +11,6 @@ public class TheRipper extends Minion implements SpecialCard{
     @Override
     public void useAbility(Minion subject) {
         subject.setAttackDamage(subject.getAttackDamage() - 2);
+        attacked = true;
     }
 }

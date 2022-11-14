@@ -13,5 +13,6 @@ public class Miraj extends Minion implements SpecialCard{
         int tmp = this.health;
         this.health = subject.getHealth();
         subject.setHealth(tmp);
+        attacked = true;
     }
 }

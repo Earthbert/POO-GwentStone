@@ -11,5 +11,6 @@ public class Disciple extends Minion implements SpecialCard{
     @Override
     public void useAbility(Minion subject) {
         subject.setHealth(subject.getHealth() + 2);
+        attacked = true;
     }
 }

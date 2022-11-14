@@ -19,12 +19,14 @@ public abstract class Card {
         this.mana = card.getMana();
     }
 
-    public Card(Card copied) {
+    protected Card(Card copied) {
         this.name = copied.name;
         this.description = copied.description;
         this.colors = copied.colors;
         this.mana = copied.mana;
     }
+
+    public abstract Card clone();
 
     public String getName() {
         return name;

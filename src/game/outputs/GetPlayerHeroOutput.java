@@ -1,16 +1,16 @@
 package game.outputs;
 
-import cards.heroes.Hero;
+import cards.Card;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 public class GetPlayerHeroOutput {
     private final String command = "getPlayerHero";
     private final int playerIdx;
-    private final Hero hero;
+    private final Card hero;
 
-    public GetPlayerHeroOutput(int playerIdx, Hero hero) {
+    public GetPlayerHeroOutput(int playerIdx, Card hero) {
         this.playerIdx = playerIdx;
-        this.hero = hero;
+        this.hero = hero.clone();
     }
 
     public String getCommand() {
@@ -22,7 +22,7 @@ public class GetPlayerHeroOutput {
     }
 
     @JsonGetter("output")
-    public Hero getHero() {
+    public Card getHero() {
         return hero;
     }
 }

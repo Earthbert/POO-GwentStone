@@ -19,6 +19,7 @@ public class Error {
         errorStrings.put(NO_MANA_H, "Not enough mana to use hero's ability.");
         errorStrings.put(ALREADY_ATTACKED_H, "Hero has already attacked this turn.");
         errorStrings.put(ROW_ENEMY, "Chosen row does not belong to the enemy.");
+        errorStrings.put(ROW_ENEMY_H, "Selected row does not belong to the enemy.");
         errorStrings.put(ROW_PLAYER, "Selected row does not belong to the current player.");
         errorStrings.put(NOT_ENV, "Chosen card is not of type environment.");
         errorStrings.put(NO_MANA_E, "Not enough mana to use environment card.");

@@ -1,11 +1,10 @@
 package game;
 
-import cards.Attackable;
 import cards.Card;
 import cards.Minion;
 import cards.environmentcards.*;
 import cards.heroes.*;
-import cards.specialcards.*;;
+import cards.specialcards.*;
 import deck.Deck;
 import fileio.ActionsInput;
 import fileio.Coordinates;
@@ -90,7 +89,6 @@ public class Game {
             } catch (ExceptionWonGame e) {
                 gameMaster.winGame(startingPlayer);
                 gameMaster.output.addPOJO(new GameOver(startingPlayer));
-                return;
             }
 
             try {
@@ -100,7 +98,6 @@ public class Game {
             } catch (ExceptionWonGame e) {
                 gameMaster.winGame(secondPlayer);
                 gameMaster.output.addPOJO(new GameOver(secondPlayer));
-                return;
             }
 
             if (manaGain < 10) {
@@ -208,11 +205,11 @@ public class Game {
                     gameMaster.output.addPOJO(new UseAttackHeroError(attackerC, Error.getString(ErrorType.ALREADY_ATTACKED)));
                     return;
                 }
-                if (table.canAttack(playerId)) {
+                if (!table.canAttack(playerId)) {
                     gameMaster.output.addPOJO(new UseAttackHeroError(attackerC, Error.getString(ErrorType.NOT_TANK)));
                     return;
                 }
-                gameMaster.getOtherPlayer(playerId).getHero().takeDamage(attacker.getAttackDamage());
+                attacker.attack(gameMaster.getEnemyPlayerPlayer(playerId).getHero());
             }
 
             public void useHeroAbility(int affectedRow, int playerId) {
@@ -227,7 +224,7 @@ public class Game {
                 }
                 if (player.getHero() instanceof LordRoyce || player.getHero() instanceof EmpressThorina) {
                     if (table.whichPlayer(affectedRow) == playerId) {
-                        gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, Error.getString(ErrorType.ROW_ENEMY)));
+                        gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow, Error.getString(ErrorType.ROW_ENEMY_H)));
                         return;
                     }
                 } else {
@@ -290,12 +287,12 @@ public class Game {
             }
 
             private void getPlayerDeck(int playerId) {
-                List<Card> cards = new ArrayList<>(gameMaster.getPlayer(playerId).getDeck().getCardsOnDeck());
+                List<Card> cards = gameMaster.getPlayer(playerId).getDeck().getCardsOnDeck();
                 gameMaster.output.addPOJO(new GetPlayerDeckOutput(playerId, cards));
             }
 
             private void getCardsOnTable() {
-                List<List<Minion>> rows = new ArrayList<>();
+                List<List<Card>> rows = new ArrayList<>();
                 for (int i = 0; i < 4; i++) {
                     Row row = table.getRow(i);
                     rows.add(row.copyOfCards());
@@ -326,7 +323,7 @@ public class Game {
                 List<Card> cards = new ArrayList<>();
                 for (Card card : gameMaster.getPlayer(playerId).getDeck().getCardsOnHand()) {
                     if (card instanceof Environment) {
-                        cards.add(card);
+                        cards.add(card.clone());
                     }
                 }
                 gameMaster.output.addPOJO(new GetEnvironmentCardsInHandOutput(playerId, cards));
@@ -338,7 +335,7 @@ public class Game {
                     Row row = table.getRow(i);
                     for (Minion card : row.getCardsOnRow()) {
                         if (card.isFrozen())
-                            cards.add(card);
+                            cards.add(card.clone());
                     }
                 }
                 gameMaster.output.addPOJO(new GetFrozenCardsOnTableOutput(cards));

@@ -1,5 +1,6 @@
 package cards.heroes;
 
+import cards.Card;
 import cards.Minion;
 import fileio.CardInput;
 import table.Row;
@@ -10,6 +11,15 @@ public class EmpressThorina extends Hero{
 
     public EmpressThorina(CardInput card) {
         super(card);
+    }
+
+    private EmpressThorina(Card card) {
+        super((Hero) card);
+    }
+
+    @Override
+    public Card clone() {
+        return new EmpressThorina(this);
     }
 
     @Override

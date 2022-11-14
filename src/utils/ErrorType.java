@@ -12,6 +12,7 @@ public enum ErrorType {
     NO_MANA_H,
     ALREADY_ATTACKED_H,
     ROW_ENEMY,
+    ROW_ENEMY_H,
     ROW_PLAYER,
     NOT_ENV,
     NO_MANA_E,

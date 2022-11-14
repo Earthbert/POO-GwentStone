@@ -3,6 +3,7 @@ package game.outputs;
 import cards.Card;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetPlayerDeckOutput {
@@ -12,7 +13,10 @@ public class GetPlayerDeckOutput {
 
     public GetPlayerDeckOutput(int playerIdx, List<Card> cards) {
         this.playerIdx = playerIdx;
-        this.cards = cards;
+        this.cards = new ArrayList<>();
+        for (Card card : cards) {
+            this.cards.add(card.clone());
+        }
     }
 
     public String getCommand() {

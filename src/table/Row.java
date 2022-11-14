@@ -1,5 +1,6 @@
 package table;
 
+import cards.Card;
 import cards.Minion;
 import utils.UnitPos;
 
@@ -20,10 +21,10 @@ public class Row {
         this.table = table;
     }
 
-    public List<Minion> copyOfCards() {
-        List<Minion> cards = new ArrayList<>();
-        for (Minion m : cardsOnRow) {
-            cards.add(new Minion(m));
+    public List<Card> copyOfCards() {
+        List<Card> cards = new ArrayList<>();
+        for (Card card : cardsOnRow) {
+            cards.add(card.clone());
         }
         return cards;
     }
@@ -37,8 +38,8 @@ public class Row {
     }
 
     public boolean isTankPlaced () {
-        for (Minion minion : cardsOnRow) {
-            if (minion.isTank())
+        for (Minion m : cardsOnRow) {
+            if (m.isTank())
                 return true;
         }
         return false;

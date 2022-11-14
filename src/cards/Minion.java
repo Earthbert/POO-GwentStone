@@ -20,7 +20,7 @@ public class Minion extends Card implements Attackable {
     private final boolean tank;
 
     @JsonIgnore
-    private boolean attacked;
+    protected boolean attacked;
     @JsonIgnore
     private boolean frozen;
 
@@ -33,7 +33,7 @@ public class Minion extends Card implements Attackable {
         this.attackDamage = card.getAttackDamage();
     }
 
-    public Minion(Minion copied) {
+    protected Minion(Minion copied) {
         super(copied);
         this.health = copied.health;
         this.attackDamage = copied.attackDamage;
@@ -44,12 +44,19 @@ public class Minion extends Card implements Attackable {
         this.frozen = copied.frozen;
     }
 
+    @Override
+    public Card clone() {
+        return new Minion(this);
+    }
+
     public int getHealth() {
         return health;
     }
 
     public void setHealth(int health) {
         this.health = health;
+        if(health <= 0)
+            row.removeCard(this);
     }
 
     public int getAttackDamage() {
@@ -57,7 +64,10 @@ public class Minion extends Card implements Attackable {
     }
 
     public void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
+        if (attackDamage < 0)
+            this.attackDamage = 0;
+        else
+            this.attackDamage = attackDamage;
     }
 
     public boolean isFrozen() {

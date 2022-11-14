@@ -13,6 +13,15 @@ public class Firestorm extends Card implements Environment {
         super(card);
     }
 
+    private Firestorm(Card card) {
+        super(card);
+    }
+
+    @Override
+    public Card clone() {
+        return new Firestorm(this);
+    }
+
     @Override
     public void useEnvAbility(Row row) {
         List<Minion> cardsOnRow = new LinkedList<>(row.getCardsOnRow());

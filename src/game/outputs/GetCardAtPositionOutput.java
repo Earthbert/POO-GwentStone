@@ -12,7 +12,7 @@ public class GetCardAtPositionOutput {
         this.x = x;
         this.y = y;
         if (card != null)
-            this.output = new Minion((Minion) card);
+            this.output = card.clone();
         else
             output = "No card available at that position.";
     }

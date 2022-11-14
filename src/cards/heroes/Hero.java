@@ -16,7 +16,7 @@ public abstract class Hero extends Card implements Attackable {
         super(card);
     }
 
-    public Hero(Hero copied) {
+    protected Hero(Hero copied) {
         super(copied);
         this.health = copied.health;
         this.attacked = copied.attacked;

@@ -1,15 +1,15 @@
 package game.outputs;
 
-import cards.Minion;
+import cards.Card;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.util.List;
 
 public class GetCardsOnTableOutput {
     private final String command = "getCardsOnTable";
-    private final List<List<Minion>> rows;
+    private final List<List<Card>> rows;
 
-    public GetCardsOnTableOutput(List<List<Minion>> rows) {
+    public GetCardsOnTableOutput(List<List<Card>> rows) {
         this.rows = rows;
     }
 
@@ -18,7 +18,7 @@ public class GetCardsOnTableOutput {
     }
 
     @JsonGetter("output")
-    public List<List<Minion>> getRows() {
+    public List<List<Card>> getRows() {
         return rows;
     }
 }

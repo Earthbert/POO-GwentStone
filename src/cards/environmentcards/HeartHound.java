@@ -13,6 +13,15 @@ public class HeartHound extends Card implements Environment {
         super(card);
     }
 
+    private HeartHound(Card card) {
+        super(card);
+    }
+
+    @Override
+    public Card clone() {
+        return new HeartHound(this);
+    }
+
     @Override
     public void useEnvAbility(Row row) {
         List<Minion> minions = row.getCardsOnRow();

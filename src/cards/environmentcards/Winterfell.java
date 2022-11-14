@@ -10,6 +10,15 @@ public class Winterfell extends Card implements Environment {
         super(card);
     }
 
+    private Winterfell(Card card) {
+        super(card);
+    }
+
+    @Override
+    public Card clone() {
+        return new Winterfell(this);
+    }
+
     @Override
     public void useEnvAbility(Row row) {
         for (Minion m : row.getCardsOnRow()) {
