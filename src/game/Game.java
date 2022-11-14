@@ -32,6 +32,7 @@ public class Game {
     private final int secondPlayer;
     public final Table table;
     private final Command command = new Command();
+    private boolean gameOver = false;
 
 
     public Game(GameInput gameInput, DecksInput playerOneDecks, DecksInput playerTwoDecks, GameMaster gameMaster) {
@@ -79,8 +80,10 @@ public class Game {
 
     void play() {
         while (true) {
-            gameMaster.getPlayer(1).preparePlayer(manaGain);
-            gameMaster.getPlayer(2).preparePlayer(manaGain);
+            if (!gameOver) {
+                gameMaster.getPlayer(1).preparePlayer(manaGain);
+                gameMaster.getPlayer(2).preparePlayer(manaGain);
+            }
 
             try {
                 playTurn(startingPlayer);
@@ -88,6 +91,7 @@ public class Game {
                 return;
             } catch (ExceptionWonGame e) {
                 gameMaster.winGame(startingPlayer);
+                gameOver = true;
                 gameMaster.output.addPOJO(new GameOver(startingPlayer));
             }
 
@@ -97,6 +101,7 @@ public class Game {
                 return;
             } catch (ExceptionWonGame e) {
                 gameMaster.winGame(secondPlayer);
+                gameOver = true;
                 gameMaster.output.addPOJO(new GameOver(secondPlayer));
             }
 

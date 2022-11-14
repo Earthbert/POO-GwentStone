@@ -28,6 +28,7 @@ public class CommandTypes {
         cmdTypes.put("getFrozenCardsOnTable", CommandType.OUTPUT);
         cmdTypes.put("getTotalGamesPlayed", CommandType.OUTPUT);
         cmdTypes.put("getPlayerOneWins", CommandType.OUTPUT);
+        cmdTypes.put("getPlayerTwoWins", CommandType.OUTPUT);
     }
 
     public static CommandType getType(String command) {

@@ -42,14 +42,9 @@ public class Deck {
                 case "Environment" -> createEnvCard(cardInput);
                 case "none" -> System.out.println("Invalid Card");
             }
-
         }
         Random rnd = new Random(shuffleSeed);
         Collections.shuffle(cardsOnDeck, rnd);
-    }
-
-    public List<Card> getCardOnDeck() {
-        return cardsOnDeck;
     }
 
     public Card getCardFromHand(int cardIdx) {
