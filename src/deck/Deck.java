@@ -1,17 +1,10 @@
 package deck;
 
 import cards.Card;
-import cards.Minion;
-import cards.environmentcards.Firestorm;
-import cards.environmentcards.HeartHound;
-import cards.environmentcards.Winterfell;
-import cards.specialcards.Disciple;
-import cards.specialcards.Miraj;
-import cards.specialcards.TheCursedOne;
-import cards.specialcards.TheRipper;
 import fileio.CardInput;
-import helpers.Errors;
 import helpers.UnitProp;
+import lombok.SneakyThrows;
+
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Random;
@@ -22,37 +15,11 @@ public class Deck {
     private final List<Card> cardsOnDeck = new LinkedList<>();
     private final List<Card> cardsOnHand = new LinkedList<>();
 
-    private void createEnvCard(final CardInput cardInput) {
-        switch (cardInput.getName()) {
-            case "Firestorm" -> cardsOnDeck.add(new Firestorm(cardInput));
-            case "Heart Hound" -> cardsOnDeck.add(new HeartHound(cardInput));
-            case "Winterfell" -> cardsOnDeck.add(new Winterfell(cardInput));
-            default -> System.out.println(Errors.INVALID_CARD);
-        }
-    }
-
-    private void createSpecialCard(final CardInput cardInput) {
-        switch (cardInput.getName()) {
-            case "The Ripper" -> cardsOnDeck.add(new TheRipper(cardInput));
-            case "The Cursed One" -> cardsOnDeck.add(new TheCursedOne(cardInput));
-            case "Miraj" -> cardsOnDeck.add(new Miraj(cardInput));
-            case "Disciple" -> cardsOnDeck.add(new Disciple(cardInput));
-            default -> System.out.println(Errors.INVALID_CARD);
-        }
-    }
-
-    private void createStandardCard(final CardInput cardInput) {
-        cardsOnDeck.add(new Minion(cardInput));
-    }
-
+    @SneakyThrows
     public Deck(final ArrayList<CardInput> deckInput, final int shuffleSeed) {
         for (final CardInput cardInput : deckInput) {
-            switch (UnitProp.getType(cardInput.getName())) {
-                case STANDARD -> createStandardCard(cardInput);
-                case SPECIAL -> createSpecialCard(cardInput);
-                case ENVIRONMENT -> createEnvCard(cardInput);
-                default -> System.out.println(Errors.INVALID_CARD);
-            }
+            final Card card = (Card) UnitProp.getCtor(cardInput.getName()).newInstance(cardInput);
+            cardsOnDeck.add(card);
         }
         final Random rnd = new Random(shuffleSeed);
         Collections.shuffle(cardsOnDeck, rnd);
