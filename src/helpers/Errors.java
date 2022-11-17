@@ -11,7 +11,7 @@ final public class Errors {
     public static final String ALREADY_ATTACKED = "Attacker card has already attacked this turn.";
     public static final String FROZEN_ATTACKER = "Attacker card is frozen.";
     public static final String NOT_TANK = "Attacked card is not of type 'Tank'.";
-    public static final String INVALID_HEAL =
+    public static final String INVALID_SUPPORT =
         "Attacked card does not belong to the current player.";
     public static final String NO_MANA_H = "Not enough mana to use hero's ability.";
     public static final String ALREADY_ATTACKED_H = "Hero has already attacked this turn.";
@@ -23,7 +23,6 @@ final public class Errors {
     public static final String HEART_HOUND =
         "Cannot steal enemy card since the player's row is full.";
     public static final String INVALID_CMD = "Invalid Command : This shouldn't happen";
-    public static final String INVALID_CARD = "Invalid Card : This shouldn't happen";
     public static final String NO_CARD_POS = "No card available at that position.";
     public static final String PLAYER_ONE_KILL = "Player one killed the enemy hero.";
     public static final String PLAYER_TWO_KILL = "Player two killed the enemy hero.";

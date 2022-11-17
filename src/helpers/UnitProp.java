@@ -19,15 +19,15 @@ public final class UnitProp {
         final UnitType type;
         final UnitPos position;
         final boolean tank;
-        final boolean friendly;
+        final boolean support;
         final Class<?> clazz;
 
         Proprieties(final UnitType type, final UnitPos position,
-                    final boolean tank, final boolean friendly, final Class<?> clazz) {
+                    final boolean tank, final boolean support, final Class<?> clazz) {
             this.type = type;
             this.position = position;
             this.tank = tank;
-            this.friendly = friendly;
+            this.support = support;
             this.clazz = clazz;
         }
     }
@@ -71,6 +71,9 @@ public final class UnitProp {
      * @return True if unit is tank, false otherwise.
      */
     public static boolean isTank(final String name) {
+        if (!UNIT_PROPS.containsKey(name)) {
+            exit(name);
+        }
         return UNIT_PROPS.get(name).tank;
     }
 
@@ -81,6 +84,9 @@ public final class UnitProp {
      * @return Table Position.
      */
     public static UnitPos getPosition(final String name) {
+        if (!UNIT_PROPS.containsKey(name)) {
+            exit(name);
+        }
         return UNIT_PROPS.get(name).position;
     }
 
@@ -92,6 +98,9 @@ public final class UnitProp {
      * @return Unit Type.
      */
     public static UnitType getType(final String name) {
+        if (!UNIT_PROPS.containsKey(name)) {
+            exit(name);
+        }
         return UNIT_PROPS.get(name).type;
     }
 
@@ -102,12 +111,22 @@ public final class UnitProp {
      * @param name Name of Card
      * @return True if card is friendly.
      */
-    public static boolean isFriendly(final String name) {
-        return UNIT_PROPS.get(name).friendly;
+    public static boolean isSupport(final String name) {
+        if (!UNIT_PROPS.containsKey(name)) {
+            exit(name);
+        }
+        return UNIT_PROPS.get(name).support;
     }
 
     @SneakyThrows
     public static Constructor<?> getCtor(final String name) {
+        if (!UNIT_PROPS.containsKey(name)) {
+            exit(name);
+        }
         return UNIT_PROPS.get(name).clazz.getConstructor(CardInput.class);
+    }
+
+    private static void exit(final String card) {
+        throw new ExceptionInvalidCard("ERROR: Card {" + card + "} doesn't exit.");
     }
 }
