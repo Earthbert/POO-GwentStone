@@ -232,10 +232,10 @@ public class Game {
                         Errors.ALREADY_ATTACKED));
                     return;
                 }
-                if (UnitProp.isFriendly(attacker.getName())) {
+                if (UnitProp.isSupport(attacker.getName())) {
                     if (table.whichPlayer(attackedC.getX()) != playerId) {
                         gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC,
-                            Errors.INVALID_HEAL));
+                            Errors.INVALID_SUPPORT));
                         return;
                     }
                 } else {
@@ -285,7 +285,7 @@ public class Game {
                         Errors.ALREADY_ATTACKED_H));
                     return;
                 }
-                if (!UnitProp.isFriendly(player.getHero().getName())) {
+                if (!UnitProp.isSupport(player.getHero().getName())) {
                     if (table.whichPlayer(affectedRow) == playerId) {
                         gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow,
                             Errors.ROW_ENEMY_H));

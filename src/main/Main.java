@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
 import fileio.Input;
 import game.GameMaster;
+import helpers.ExceptionInvalidCard;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +72,12 @@ public final class Main {
         final ArrayNode output = objectMapper.createArrayNode();
 
         final GameMaster games = new GameMaster();
-        games.entry(inputData, output);
+        try {
+            games.entry(inputData, output);
+        } catch (final ExceptionInvalidCard e) {
+            System.out.println(e.getMessage());
+            return;
+        }
 
         final ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
