@@ -34,10 +34,6 @@ public class Player {
         return hero;
     }
 
-    public final void setHero(final Hero hero) {
-        this.hero = hero;
-    }
-
     public final Deck getDeck() {
         return deck;
     }

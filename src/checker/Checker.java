@@ -80,7 +80,6 @@ public final class Checker {
 
     /**
      * This method is used to calculate score of implementation
-     *
      * 18 tests (80 points maximum)
      */
     private static void calculateScoreAllTests() throws IOException {
