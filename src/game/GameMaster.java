@@ -54,8 +54,8 @@ public class GameMaster {
      * @param arrayNode where to print output
      */
     public void entry(final Input inputData, final ArrayNode arrayNode) {
-        player[1] = new Player(1);
-        player[2] = new Player(2);
+        player[1] = new Player();
+        player[2] = new Player();
         this.output = arrayNode;
         for (final GameInput gameInput : inputData.getGames()) {
             final Game currentGame = new Game(gameInput, inputData.getPlayerOneDecks(),

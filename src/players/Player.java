@@ -1,15 +1,12 @@
 package players;
 
-import cards.heroes.EmpressThorina;
-import cards.heroes.LordRoyce;
-import cards.heroes.KingMudface;
-import cards.heroes.GeneralKocioraw;
 import cards.heroes.Hero;
 import deck.Deck;
 import fileio.CardInput;
+import helpers.UnitProp;
+import lombok.SneakyThrows;
 
 public class Player {
-    private final int playerId;
 
     private int mana;
 
@@ -23,20 +20,14 @@ public class Player {
      * @param cardInput Hero Input.
      * @param deckSelected Deck of cards.
      */
+    @SneakyThrows
     public void startGame(final CardInput cardInput, final Deck deckSelected) {
         this.mana = 0;
         this.deck = deckSelected;
-        this.hero = switch (cardInput.getName()) {
-            case "Lord Royce" -> new LordRoyce(cardInput);
-            case "Empress Thorina" -> new EmpressThorina(cardInput);
-            case "King Mudface" -> new KingMudface(cardInput);
-            case "General Kocioraw" -> new GeneralKocioraw(cardInput);
-            default -> null;
-        };
+        this.hero = (Hero) UnitProp.getCtor(cardInput.getName()).newInstance(cardInput);
     }
 
-    public Player(final int playerId) {
-        this.playerId = playerId;
+    public Player() {
     }
 
     public final Hero getHero() {

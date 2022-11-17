@@ -1,25 +1,34 @@
 package helpers;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import static helpers.UnitType.*;
 import static helpers.UnitPos.*;
+import cards.*;
+import cards.specialcards.*;
+import cards.environmentcards.*;
+import cards.heroes.*;
+import fileio.CardInput;
+import lombok.SneakyThrows;
 
 public final class UnitProp {
     private UnitProp() {
     }
 
-    static class Proprieties {
+    private static class Proprieties {
         UnitType type;
         UnitPos position;
         boolean tank;
         boolean friendly;
+        Class<?> clazz;
 
         Proprieties(final UnitType type, final UnitPos position,
-                    final boolean tank, final boolean friendly) {
+                    final boolean tank, final boolean friendly, final Class<?> clazz) {
             this.type = type;
             this.position = position;
             this.tank = tank;
             this.friendly = friendly;
+            this.clazz = clazz;
         }
     }
 
@@ -27,24 +36,32 @@ public final class UnitProp {
 
     static {
         // Standard Cards//
-        UNIT_PROPS.put("Sentinel", new Proprieties(STANDARD, RANGED, false, false));
-        UNIT_PROPS.put("Berserker", new Proprieties(STANDARD, RANGED, false, false));
-        UNIT_PROPS.put("Goliath", new Proprieties(STANDARD, CLOSE, true, false));
-        UNIT_PROPS.put("Warden", new Proprieties(STANDARD, CLOSE, true, false));
+        UNIT_PROPS.put("Sentinel", new Proprieties(STANDARD, RANGED, false, false, Minion.class));
+        UNIT_PROPS.put("Berserker", new Proprieties(STANDARD, RANGED, false, false, Minion.class));
+        UNIT_PROPS.put("Goliath", new Proprieties(STANDARD, CLOSE, true, false, Minion.class));
+        UNIT_PROPS.put("Warden", new Proprieties(STANDARD, CLOSE, true, false, Minion.class));
         // Special Cards //
-        UNIT_PROPS.put("The Ripper", new Proprieties(SPECIAL, CLOSE, false, false));
-        UNIT_PROPS.put("Miraj", new Proprieties(SPECIAL, CLOSE, false, false));
-        UNIT_PROPS.put("The Cursed One", new Proprieties(SPECIAL, RANGED, false, false));
-        UNIT_PROPS.put("Disciple", new Proprieties(SPECIAL, RANGED, false, true));
+        UNIT_PROPS.put("The Ripper", new Proprieties(SPECIAL, CLOSE,
+            false, false, TheRipper.class));
+        UNIT_PROPS.put("Miraj", new Proprieties(SPECIAL, CLOSE, false, false, Miraj.class));
+        UNIT_PROPS.put("The Cursed One", new Proprieties(SPECIAL, RANGED,
+            false, false, TheCursedOne.class));
+        UNIT_PROPS.put("Disciple", new Proprieties(SPECIAL, RANGED, false, true, Disciple.class));
         // Environment Cards //
-        UNIT_PROPS.put("Firestorm", new Proprieties(ENVIRONMENT, null, false, false));
-        UNIT_PROPS.put("Winterfell", new Proprieties(ENVIRONMENT, null, false, false));
-        UNIT_PROPS.put("Heart Hound", new Proprieties(ENVIRONMENT, null, false, false));
+        UNIT_PROPS.put("Firestorm", new Proprieties(ENVIRONMENT, null,
+            false, false, Firestorm.class));
+        UNIT_PROPS.put("Winterfell", new Proprieties(ENVIRONMENT, null,
+            false, false, Winterfell.class));
+        UNIT_PROPS.put("Heart Hound", new Proprieties(ENVIRONMENT, null,
+            false, false, HeartHound.class));
         // Hero Cards //
-        UNIT_PROPS.put("Empress Thorina", new Proprieties(HERO, null, false, false));
-        UNIT_PROPS.put("General Kocioraw", new Proprieties(HERO, null, false, true));
-        UNIT_PROPS.put("King Mudface", new Proprieties(HERO, null, false, true));
-        UNIT_PROPS.put("Lord Royce", new Proprieties(HERO, null, false, false));
+        UNIT_PROPS.put("Empress Thorina", new Proprieties(HERO, null,
+            false, false, EmpressThorina.class));
+        UNIT_PROPS.put("General Kocioraw", new Proprieties(HERO, null,
+            false, true, GeneralKocioraw.class));
+        UNIT_PROPS.put("King Mudface", new Proprieties(HERO, null,
+            false, true, KingMudface.class));
+        UNIT_PROPS.put("Lord Royce", new Proprieties(HERO, null, false, false, LordRoyce.class));
     }
 
     /**
@@ -87,5 +104,10 @@ public final class UnitProp {
      */
     public static boolean isFriendly(final String name) {
         return UNIT_PROPS.get(name).friendly;
+    }
+
+    @SneakyThrows
+    public static Constructor<?> getCtor(final String name) {
+        return UNIT_PROPS.get(name).clazz.getConstructor(CardInput.class);
     }
 }
