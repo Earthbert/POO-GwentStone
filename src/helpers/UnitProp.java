@@ -1,48 +1,50 @@
 package helpers;
 
 import java.util.HashMap;
+import static helpers.UnitType.*;
+import static helpers.UnitPos.*;
 
 public final class UnitProp {
     private UnitProp() {
     }
 
     static class Proprieties {
-        String type;
+        UnitType type;
         UnitPos position;
         boolean tank;
+        boolean friendly;
 
-        Proprieties(final String type, final UnitPos position, final boolean tank) {
+        Proprieties(final UnitType type, final UnitPos position,
+                    final boolean tank, final boolean friendly) {
             this.type = type;
             this.position = position;
             this.tank = tank;
+            this.friendly = friendly;
         }
     }
 
-    private static final HashMap<String, Proprieties> UNIT_PROPS = new HashMap<>() {
-        @Override
-        public Proprieties get(final Object key) {
-            if (!containsKey(key)) {
-                return new Proprieties("none", null, false);
-            }
-            return super.get(key);
-        }
-    };
+    private static final HashMap<String, Proprieties> UNIT_PROPS = new HashMap<>();
 
     static {
         // Standard Cards//
-        UNIT_PROPS.put("Sentinel", new Proprieties("Standard", UnitPos.RANGED, false));
-        UNIT_PROPS.put("Berserker", new Proprieties("Standard", UnitPos.RANGED, false));
-        UNIT_PROPS.put("Goliath", new Proprieties("Standard", UnitPos.CLOSE, true));
-        UNIT_PROPS.put("Warden", new Proprieties("Standard", UnitPos.CLOSE, true));
+        UNIT_PROPS.put("Sentinel", new Proprieties(STANDARD, RANGED, false, false));
+        UNIT_PROPS.put("Berserker", new Proprieties(STANDARD, RANGED, false, false));
+        UNIT_PROPS.put("Goliath", new Proprieties(STANDARD, CLOSE, true, false));
+        UNIT_PROPS.put("Warden", new Proprieties(STANDARD, CLOSE, true, false));
         // Special Cards //
-        UNIT_PROPS.put("The Ripper", new Proprieties("Special", UnitPos.CLOSE, false));
-        UNIT_PROPS.put("Miraj", new Proprieties("Special", UnitPos.CLOSE, false));
-        UNIT_PROPS.put("The Cursed One", new Proprieties("Special", UnitPos.RANGED, false));
-        UNIT_PROPS.put("Disciple", new Proprieties("Special", UnitPos.RANGED, false));
+        UNIT_PROPS.put("The Ripper", new Proprieties(SPECIAL, CLOSE, false, false));
+        UNIT_PROPS.put("Miraj", new Proprieties(SPECIAL, CLOSE, false, false));
+        UNIT_PROPS.put("The Cursed One", new Proprieties(SPECIAL, RANGED, false, false));
+        UNIT_PROPS.put("Disciple", new Proprieties(SPECIAL, RANGED, false, true));
         // Environment Cards //
-        UNIT_PROPS.put("Firestorm", new Proprieties("Environment", null, false));
-        UNIT_PROPS.put("Winterfell", new Proprieties("Environment", null, false));
-        UNIT_PROPS.put("Heart Hound", new Proprieties("Environment", null, false));
+        UNIT_PROPS.put("Firestorm", new Proprieties(ENVIRONMENT, null, false, false));
+        UNIT_PROPS.put("Winterfell", new Proprieties(ENVIRONMENT, null, false, false));
+        UNIT_PROPS.put("Heart Hound", new Proprieties(ENVIRONMENT, null, false, false));
+        // Hero Cards //
+        UNIT_PROPS.put("Empress Thorina", new Proprieties(HERO, null, false, false));
+        UNIT_PROPS.put("General Kocioraw", new Proprieties(HERO, null, false, true));
+        UNIT_PROPS.put("King Mudface", new Proprieties(HERO, null, false, true));
+        UNIT_PROPS.put("Lord Royce", new Proprieties(HERO, null, false, false));
     }
 
     /**
@@ -68,10 +70,22 @@ public final class UnitProp {
     /**
      * Return unit type of card.
      * It is used at Card creation.
+     *
      * @param name Name of Card.
      * @return Unit Type.
      */
-    public static String getType(final String name) {
+    public static UnitType getType(final String name) {
         return UNIT_PROPS.get(name).type;
+    }
+
+    /**
+     * Return what type of attack a card has.
+     * If it returns true it means card affects their own cards / rows.
+     *
+     * @param name Name of Card
+     * @return True if card is friendly.
+     */
+    public static boolean isFriendly(final String name) {
+        return UNIT_PROPS.get(name).friendly;
     }
 }

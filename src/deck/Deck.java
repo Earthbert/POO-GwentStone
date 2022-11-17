@@ -48,9 +48,9 @@ public class Deck {
     public Deck(final ArrayList<CardInput> deckInput, final int shuffleSeed) {
         for (final CardInput cardInput : deckInput) {
             switch (UnitProp.getType(cardInput.getName())) {
-                case "Standard" -> createStandardCard(cardInput);
-                case "Special" -> createSpecialCard(cardInput);
-                case "Environment" -> createEnvCard(cardInput);
+                case STANDARD -> createStandardCard(cardInput);
+                case SPECIAL -> createSpecialCard(cardInput);
+                case ENVIRONMENT -> createEnvCard(cardInput);
                 default -> System.out.println(Errors.INVALID_CARD);
             }
         }

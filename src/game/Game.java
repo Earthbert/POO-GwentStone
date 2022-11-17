@@ -3,11 +3,7 @@ package game;
 import cards.Card;
 import cards.Minion;
 import cards.environmentcards.Environment;
-import cards.environmentcards.HeartHound;
-import cards.heroes.EmpressThorina;
 import cards.heroes.Hero;
-import cards.heroes.LordRoyce;
-import cards.specialcards.Disciple;
 import cards.specialcards.SpecialCard;
 
 import deck.Deck;
@@ -17,32 +13,9 @@ import fileio.ActionsInput;
 import fileio.DecksInput;
 import fileio.Coordinates;
 import fileio.GameInput;
-// Imported like this to pass checkstyle :(
-import game.errors.PlaceCardError;
-import game.errors.GameOver;
-import game.errors.CardUsesAttackError;
-import game.errors.UseHeroAbilityError;
-import game.errors.CardUsesAbilityError;
-import game.errors.UseAttackHeroError;
-import game.errors.UseEnvironmentCardError;
-
-import game.outputs.GetCardAtPositionOutput;
-import game.outputs.GetCardsInHandOutput;
-import game.outputs.GetCardsOnTableOutput;
-import game.outputs.GetEnvironmentCardsInHandOutput;
-import game.outputs.GetFrozenCardsOnTableOutput;
-import game.outputs.GetPlayerDeckOutput;
-import game.outputs.GetPlayerHeroOutput;
-import game.outputs.GetPlayerManaOutput;
-import game.outputs.GetPlayerTurnOutput;
-import game.outputs.GetPlayerWinsOutput;
-import game.outputs.GetTotalGamesPlayedOutput;
-
-import helpers.CommandTypes;
-import helpers.Errors;
-import helpers.ExceptionNoCommands;
-import helpers.ExceptionWonGame;
-
+import game.errors.*;
+import game.outputs.*;
+import helpers.*;
 import players.Player;
 
 import table.Row;
@@ -202,7 +175,7 @@ public class Game {
             public void placeCard(final int handIdx, final int playerId) {
                 final Player player = gameMaster.getPlayer(playerId);
                 final Card card = player.getDeck().getCardFromHand(handIdx);
-                if (card instanceof Environment) {
+                if (UnitProp.getType(card.getName()) == UnitType.ENVIRONMENT) {
                     gameMaster.output.addPOJO(new PlaceCardError(handIdx, Errors.PLACE_ENV));
                     return;
                 }
@@ -259,7 +232,7 @@ public class Game {
                         Errors.ALREADY_ATTACKED));
                     return;
                 }
-                if (attacker instanceof Disciple) {
+                if (UnitProp.isFriendly(attacker.getName())) {
                     if (table.whichPlayer(attackedC.getX()) != playerId) {
                         gameMaster.output.addPOJO(new CardUsesAbilityError(attackerC, attackedC,
                             Errors.INVALID_HEAL));
@@ -312,8 +285,7 @@ public class Game {
                         Errors.ALREADY_ATTACKED_H));
                     return;
                 }
-                if (player.getHero() instanceof LordRoyce
-                    || player.getHero() instanceof EmpressThorina) {
+                if (!UnitProp.isFriendly(player.getHero().getName())) {
                     if (table.whichPlayer(affectedRow) == playerId) {
                         gameMaster.output.addPOJO(new UseHeroAbilityError(affectedRow,
                             Errors.ROW_ENEMY_H));
@@ -335,7 +307,7 @@ public class Game {
                                            final int playerId) {
                 final Player player = gameMaster.getPlayer(playerId);
                 final Card card = player.getDeck().getCardFromHand(handIdx);
-                if (!(card instanceof Environment)) {
+                if (!(UnitProp.getType(card.getName()) == UnitType.ENVIRONMENT)) {
                     gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx,
                         affectedRow, Errors.NOT_ENV));
                     return;
@@ -350,7 +322,7 @@ public class Game {
                         affectedRow, Errors.ROW_ENEMY));
                     return;
                 }
-                if ((card instanceof HeartHound)
+                if ((card.getName().equals("Heart Hound"))
                     && table.getRow(Table.NR_ROWS - 1 - affectedRow).getNrOfCards() >= Row.MAX_R) {
                     gameMaster.output.addPOJO(new UseEnvironmentCardError(handIdx,
                         affectedRow, Errors.HEART_HOUND));
@@ -424,7 +396,7 @@ public class Game {
             private void getEnvironmentCardsInHand(final int playerId) {
                 final List<Card> cards = new ArrayList<>();
                 for (final Card card : gameMaster.getPlayer(playerId).getDeck().getCardsOnHand()) {
-                    if (card instanceof Environment) {
+                    if (UnitProp.getType(card.getName()) == UnitType.ENVIRONMENT) {
                         cards.add(card.clone());
                     }
                 }
