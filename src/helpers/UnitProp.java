@@ -16,11 +16,11 @@ public final class UnitProp {
     }
 
     private static class Proprieties {
-        UnitType type;
-        UnitPos position;
-        boolean tank;
-        boolean friendly;
-        Class<?> clazz;
+        final UnitType type;
+        final UnitPos position;
+        final boolean tank;
+        final boolean friendly;
+        final Class<?> clazz;
 
         Proprieties(final UnitType type, final UnitPos position,
                     final boolean tank, final boolean friendly, final Class<?> clazz) {
