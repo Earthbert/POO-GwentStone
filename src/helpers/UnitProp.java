@@ -15,21 +15,7 @@ public final class UnitProp {
     private UnitProp() {
     }
 
-    private static class Proprieties {
-        final UnitType type;
-        final UnitPos position;
-        final boolean tank;
-        final boolean support;
-        final Class<?> clazz;
-
-        Proprieties(final UnitType type, final UnitPos position,
-                    final boolean tank, final boolean support, final Class<?> clazz) {
-            this.type = type;
-            this.position = position;
-            this.tank = tank;
-            this.support = support;
-            this.clazz = clazz;
-        }
+    private record Proprieties(UnitType type, UnitPos position, boolean tank, boolean support, Class<?> clazz) {
     }
 
     private static final HashMap<String, Proprieties> UNIT_PROPS = new HashMap<>();
