@@ -71,9 +71,9 @@ public final class Main {
 
         final ArrayNode output = objectMapper.createArrayNode();
 
-        final GameMaster games = new GameMaster();
+        final GameMaster games = new GameMaster(output);
         try {
-            games.entry(inputData, output);
+            games.entry(inputData);
         } catch (final ExceptionInvalidCard e) {
             System.out.println(e.getMessage());
             return;

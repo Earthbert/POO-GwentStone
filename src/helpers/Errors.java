@@ -22,7 +22,7 @@ final public class Errors {
     public static final String NO_MANA_E = "Not enough mana to use environment card.";
     public static final String HEART_HOUND =
         "Cannot steal enemy card since the player's row is full.";
-    public static final String INVALID_CMD = "Invalid Command : This shouldn't happen";
+    public static final String INVALID_CMD = "Invalid Command";
     public static final String NO_CARD_POS = "No card available at that position.";
     public static final String PLAYER_ONE_KILL = "Player one killed the enemy hero.";
     public static final String PLAYER_TWO_KILL = "Player two killed the enemy hero.";

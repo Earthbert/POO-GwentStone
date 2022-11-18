@@ -6,7 +6,15 @@ final public class CommandTypes {
     private CommandTypes() {
     }
 
-    private static final HashMap<String, CommandType> CMD_TYPES = new HashMap<>();
+    private static final HashMap<String, CommandType> CMD_TYPES = new HashMap<>() {
+        @Override
+        public CommandType get(final Object key) {
+            if (!containsKey(key)) {
+                return CommandType.INVALID;
+            }
+            return super.get(key);
+        }
+    };
 
     static {
         CMD_TYPES.put("endPlayerTurn", CommandType.TURNOVER);

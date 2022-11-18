@@ -8,10 +8,14 @@ import players.Player;
 public class GameMaster {
     private static final int NR_PLAYERS = 3;
 
-    ArrayNode output;
+    final ArrayNode output;
 
     private int totalGames = 0;
     private final Player[] player = new Player[NR_PLAYERS];
+
+    public GameMaster(final ArrayNode arrayNode) {
+        output = arrayNode;
+    }
 
     /**
      * Given an Index returns player with corresponding index.
@@ -51,12 +55,10 @@ public class GameMaster {
      * Generates games between to player.
      * Players are create at the call
      * @param inputData Input data
-     * @param arrayNode where to print output
      */
-    public void entry(final Input inputData, final ArrayNode arrayNode) {
+    public void entry(final Input inputData) {
         player[1] = new Player();
         player[2] = new Player();
-        this.output = arrayNode;
         for (final GameInput gameInput : inputData.getGames()) {
             final Game currentGame = new Game(gameInput, inputData.getPlayerOneDecks(),
                 inputData.getPlayerTwoDecks(), this);

@@ -97,7 +97,8 @@ public class Game {
                 }
                 case ACTION -> this.command.action.handle(cmd, playerId);
                 case OUTPUT -> this.command.output.handle(cmd, playerId);
-                default -> System.out.println(Errors.INVALID_CMD);
+                case INVALID -> gameMaster.output.addPOJO(command.output.jsonCreator.invalidCmd(cmd.getCommand()));
+                default -> { }
             }
 
             if (cmdInx >= commands.size()) {
@@ -169,7 +170,7 @@ public class Game {
                     case "useHeroAbility" -> useHeroAbility(cmd.getAffectedRow(), playerId);
                     case "useEnvironmentCard" ->
                         useEnvironmentCard(cmd.getHandIdx(), cmd.getAffectedRow(), playerId);
-                    default -> System.out.println(Errors.INVALID_CMD);
+                    default -> { }
                 }
             }
 
@@ -425,7 +426,7 @@ public class Game {
                     case "getTotalGamesPlayed" -> getTotalGamesPlayed();
                     case "getPlayerOneWins" -> getPlayerWins(1);
                     case "getPlayerTwoWins" -> getPlayerWins(2);
-                    default -> System.out.println(Errors.INVALID_CMD);
+                    default -> { }
                 }
             }
 
@@ -466,7 +467,7 @@ public class Game {
             private void getCardAtPosition(final int rowNr, final int cardIdx) {
                 final Card card = (table.getCard(rowNr, cardIdx));
                 if (card == null) {
-                    gameMaster.output.addPOJO(jsonCreator.getCardAtPosition(rowNr, cardIdx, Errors.NO_CARD_POS));
+                    gameMaster.output.addPOJO(jsonCreator.getCardAtPosition(rowNr,cardIdx, Errors.NO_CARD_POS));
                 } else {
                     gameMaster.output.addPOJO(jsonCreator.getCardAtPosition(rowNr, cardIdx, card.clone()));
                 }
@@ -513,7 +514,7 @@ public class Game {
             private class JsonCreator {
                 private final ObjectMapper objectMapper = new ObjectMapper();
 
-                public ObjectNode getCardsInHand(final int playerIdx, final List<Card> cards) {
+                private ObjectNode getCardsInHand(final int playerIdx, final List<Card> cards) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getCardsInHand");
                     objectNode.put("playerIdx", playerIdx);
@@ -521,7 +522,7 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getPlayerDeck(final int playerIdx, final List<Card> cards) {
+                private ObjectNode getPlayerDeck(final int playerIdx, final List<Card> cards) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getPlayerDeck");
                     objectNode.put("playerIdx", playerIdx);
@@ -529,21 +530,21 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getCardsOnTable(final List<List<Card>> rows) {
+                private ObjectNode getCardsOnTable(final List<List<Card>> rows) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getCardsOnTable");
                     objectNode.putPOJO("output", rows);
                     return objectNode;
                 }
 
-                public ObjectNode getPlayerTurn(final int activePlayer) {
+                private ObjectNode getPlayerTurn(final int activePlayer) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getPlayerTurn");
                     objectNode.put("output", activePlayer);
                     return objectNode;
                 }
 
-                public ObjectNode getPlayerHero(final int playerIdx, final Card hero) {
+                private ObjectNode getPlayerHero(final int playerIdx, final Card hero) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getPlayerHero");
                     objectNode.put("playerIdx", playerIdx);
@@ -551,7 +552,7 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getCardAtPosition(final int x, final int y, final Object out) {
+                private ObjectNode getCardAtPosition(final int x, final int y, final Object out) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getCardAtPosition");
                     objectNode.put("x", x);
@@ -560,7 +561,7 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getPlayerMana(final int playerIdx, final int mana) {
+                private ObjectNode getPlayerMana(final int playerIdx, final int mana) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getPlayerMana");
                     objectNode.put("playerIdx", playerIdx);
@@ -568,7 +569,7 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getEnvironmentCardsInHand(final int playerIdx,
+                private ObjectNode getEnvironmentCardsInHand(final int playerIdx,
                                                             final List<Card> cards) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getEnvironmentCardsInHand");
@@ -577,21 +578,21 @@ public class Game {
                     return objectNode;
                 }
 
-                public ObjectNode getFrozenCardsOnTable(final List<Card> cards) {
+                private ObjectNode getFrozenCardsOnTable(final List<Card> cards) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getFrozenCardsOnTable");
                     objectNode.putPOJO("output", cards);
                     return objectNode;
                 }
 
-                public ObjectNode getTotalGamesPlayed(final int gamesPlayed) {
+                private ObjectNode getTotalGamesPlayed(final int gamesPlayed) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     objectNode.put("command", "getTotalGamesPlayed");
                     objectNode.put("output", gamesPlayed);
                     return objectNode;
                 }
 
-                public ObjectNode getPlayerWins(final int playerIdx, final int gamesWon) {
+                private ObjectNode getPlayerWins(final int playerIdx, final int gamesWon) {
                     final ObjectNode objectNode = objectMapper.createObjectNode();
                     if (playerIdx == 1) {
                         objectNode.put("command", "getPlayerOneWins");
@@ -599,6 +600,13 @@ public class Game {
                         objectNode.put("command", "getPlayerTwoWins");
                     }
                     objectNode.put("output", gamesWon);
+                    return objectNode;
+                }
+
+                private ObjectNode invalidCmd(final String cmd) {
+                    final ObjectNode objectNode = objectMapper.createObjectNode();
+                    objectNode.put("command", cmd);
+                    objectNode.put("error:", Errors.INVALID_CMD);
                     return objectNode;
                 }
             }
