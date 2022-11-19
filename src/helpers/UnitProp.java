@@ -104,6 +104,13 @@ public final class UnitProp {
         return UNIT_PROPS.get(name).support;
     }
 
+    /**
+     * Return constructor of a cards.
+     * Used to create instances depending on card name.
+     *
+     * @param name Name of Card
+     * @return constructor.
+     */
     @SneakyThrows
     public static Constructor<?> getCtor(final String name) {
         if (!UNIT_PROPS.containsKey(name)) {
