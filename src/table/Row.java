@@ -2,7 +2,6 @@ package table;
 
 import cards.Card;
 import cards.Minion;
-import helpers.UnitPos;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,11 +14,9 @@ public class Row {
 
     private final Table table;
     private final int player;
-    private final UnitPos type;
 
-    public Row(final int player, final UnitPos type, final Table table) {
+    public Row(final int player, final Table table) {
         this.player = player;
-        this.type = type;
         this.table = table;
     }
 

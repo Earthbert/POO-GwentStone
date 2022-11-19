@@ -1,7 +1,6 @@
 package table;
 
 import cards.Minion;
-import helpers.UnitPos;
 
 import static helpers.UnitPos.CLOSE;
 import static helpers.UnitPos.RANGED;
@@ -11,10 +10,10 @@ public class Table {
     private final Row[] rows = new Row[NR_ROWS];
 
     public Table() {
-        rows[0] = new Row(2, RANGED, this);
-        rows[1] = new Row(2, UnitPos.CLOSE, this);
-        rows[2] = new Row(1, UnitPos.CLOSE, this);
-        rows[NR_ROWS - 1] = new Row(1, RANGED, this);
+        rows[0] = new Row(2, this);
+        rows[1] = new Row(2, this);
+        rows[2] = new Row(1, this);
+        rows[NR_ROWS - 1] = new Row(1, this);
     }
 
     /**
