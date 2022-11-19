@@ -26,6 +26,13 @@ public abstract class Hero extends Card implements Attackable {
         this.attacked = copied.attacked;
     }
 
+    /**
+     * Creates a deep copy of a card.
+     * Uses private / protected copy constructor.
+     * @return new Card
+     */
+    public abstract Card clone();
+
     public final int getHealth() {
         return health;
     }
