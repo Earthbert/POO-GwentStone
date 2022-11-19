@@ -26,4 +26,5 @@ final public class Errors {
     public static final String NO_CARD_POS = "No card available at that position.";
     public static final String PLAYER_ONE_KILL = "Player one killed the enemy hero.";
     public static final String PLAYER_TWO_KILL = "Player two killed the enemy hero.";
+    public static final String GAME_OVER_ALREADY = "Game it's over. No more action commands";
 }

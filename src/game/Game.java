@@ -160,6 +160,10 @@ public class Game {
             private final JsonCreator jsonCreator = new JsonCreator();
 
             public void handle(final ActionsInput cmd, final int playerId) {
+                if (gameOver) {
+                    gameMaster.output.addPOJO(jsonCreator.gameOverAlready(cmd.getCommand()));
+                    return;
+                }
                 switch (cmd.getCommand()) {
                     case "placeCard" -> placeCard(cmd.getHandIdx(), playerId);
                     case "cardUsesAttack" ->
@@ -402,6 +406,13 @@ public class Game {
                     } else {
                         node.put("gameEnded", Errors.PLAYER_TWO_KILL);
                     }
+                    return node;
+                }
+
+                private ObjectNode gameOverAlready(final String cmd) {
+                    final ObjectNode node = objectMapper.createObjectNode();
+                    node.put("command", cmd);
+                    node.put("error", Errors.GAME_OVER_ALREADY);
                     return node;
                 }
             }
